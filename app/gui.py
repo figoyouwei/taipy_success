@@ -7,16 +7,31 @@
 import taipy.gui.builder as tgb
 from taipy.gui import notify
 
-def reset_filters(state):
+from turing import levels
+
+def filter_reset(state):
     # notify and refresh state
-    notify(state, "info", "Filters has been reset.")
-    on_filter(state)
+    state.starting_level = 565.16
+    state.target_level = 540.00
     
-def on_filter(state):
-    # processing
+    notify(state, "info", "Filters has been reset.")
+    filter_refresh(state)
+    
+def filter_refresh(state):
+    print("Entering on_filter()")
+
+    # Turing
+    (
+        state.points_net,
+        state.points_pct
+    ) = levels(
+        state.starting_level,
+        state.target_level
+    )
+
     notify(state, "info", "Filters applied and data updated.")
 
-def setup_gui(on_filter, reset_filters):
+def setup_gui(filter_refresh, filter_reset):
         
     with tgb.Page() as page:
         # title line
@@ -27,7 +42,7 @@ def setup_gui(on_filter, reset_filters):
         with tgb.layout("1", class_name="pb1"):                
             with tgb.part(class_name="text-center"):
                 # reset button
-                tgb.button("RESET", on_action=reset_filters)
+                tgb.button("RESET", on_action=filter_reset)
             
         # indicators
         with tgb.layout("1 1", class_name="pb1"):
@@ -45,8 +60,7 @@ def setup_gui(on_filter, reset_filters):
                 tgb.input(
                     label="Starting level",
                     value="{starting_level}",
-                    on_change=on_filter,
-                    class_name="text-center"
+                    on_change=filter_refresh
                 )
             
             # Target level
@@ -54,9 +68,9 @@ def setup_gui(on_filter, reset_filters):
                 tgb.input(
                     label="Target level",
                     value="{target_level}",
-                    on_change=on_filter,
+                    on_change=filter_refresh
                 )
 
-        # footer 
+        # footer
         tgb.text("Developed by Youwei Zheng", mode="md", class_name="text-center pb1")               
     return page

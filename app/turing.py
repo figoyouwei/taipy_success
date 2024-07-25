@@ -5,6 +5,10 @@
 '''
 
 def levels(starting_level, target_level):
+    # Casting
+    starting_level = float(starting_level)
+    target_level = float(target_level)
+
     # Formula
     points_net = target_level - starting_level
     points_pct = ((target_level - starting_level) / starting_level) * 100

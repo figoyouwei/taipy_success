@@ -5,19 +5,15 @@
 '''
 
 from taipy.gui import Gui
-from gui import setup_gui, on_filter, reset_filters
+from gui import setup_gui, filter_refresh, filter_reset
 from turing import levels
 
 if __name__ == "__main__":
 
-    # ------------------------------
-    # 加载数据与初始化参数
-    # ------------------------------
-
+    # Initial turing.
     starting_level = 565.16
     target_level = 540.00
 
-    # Initial turing.
     (
         points_net, 
         points_pct
@@ -27,7 +23,7 @@ if __name__ == "__main__":
     )
     
     # use_reloader=True when changes are made
-    page = setup_gui(on_filter, reset_filters)
+    page = setup_gui(filter_refresh, filter_reset)
 
     Gui(page).run(
         title="Taipy Deployment on Heroku",
