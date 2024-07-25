@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "taipy-deploy-heroku"
+version = "0.1.0"
+description = ""
+authors = ["Youwei Zheng <figoyouwei@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+taipy = "3.1.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
