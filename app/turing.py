@@ -4,17 +4,21 @@
 @update: 2024.07.25
 '''
 
-def levels(starting_level, target_level):
-    # Casting
-    starting_level = float(starting_level)
-    target_level = float(target_level)
+from models import Level, Point
 
-    # Formula
-    points_net = target_level - starting_level
-    points_pct = ((target_level - starting_level) / starting_level) * 100
+def compute_points(levels: Level) -> Point:
+    # compute output values
+    try:
+        points_net = levels.target_level - levels.starting_level
+        points_pct = (points_net / levels.starting_level) * 100
+    except ZeroDivisionError:
+        raise ValueError("Starting level cannot be zero.")
 
-    # Formata
-    points_net = "{:.2f}".format(points_net)
-    points_pct = "{:.2f}".format(points_pct)
-    
-    return (points_net, points_pct)
+    # update output model
+    points = Point(
+        points_net=points_net,
+        points_pct=points_pct
+    )
+    points.update()
+
+    return points

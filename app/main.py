@@ -6,25 +6,20 @@
 
 from taipy.gui import Gui
 from gui import setup_gui, filter_refresh, filter_reset
-from turing import levels
+from turing import compute_points
+from models import Level, Point
 
 if __name__ == "__main__":
 
-    # Initial turing.
-    starting_level = 565.16
-    target_level = 540.00
-
-    (
-        points_net, 
-        points_pct
-    ) = levels(
-        starting_level=starting_level,
-        target_level=target_level
-    )
-    
-    # use_reloader=True when changes are made
+    # Create instances of data model
+    levels = Level()
+    points = Point()
+    points = compute_points(levels)
+            
+    # Create instance of page
     page = setup_gui(filter_refresh, filter_reset)
 
+    # Run page
     Gui(page).run(
         title="Taipy Deployment on Heroku",
         debug=True,
