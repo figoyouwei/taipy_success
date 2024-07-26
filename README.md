@@ -1,5 +1,5 @@
-# taipy_deploy_heroku
-This is a sample code that tests the deployment on heroku
+# taipy_success
+This is a sample code that tests taipy functionality and aims to achieve success.
 
 ## Local versions
 - 2024.07.25: Check-in
