@@ -8,3 +8,12 @@ This is a sample code that tests the deployment on heroku
 - Create instances of data models (pydantic).
 - Create instances of page models (taipy).
 - Run GUI
+
+## Docker steps
+- Create .dockerignore
+- Create Dockerfile
+- Create Dockerimage with export-docker.py
+- Run Dockerapp with
+```
+docker run -p 9000:9000 IMAGE-ID
+```

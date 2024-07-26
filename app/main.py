@@ -26,6 +26,7 @@ if __name__ == "__main__":
         use_reloader=True,
         watermark="Made by CR7",
         margin="4em",
-        # host="0.0.0.0",
+        host="0.0.0.0",
+        port=9000
         # base_url="/shggzyapp/" # key to nginx
     )

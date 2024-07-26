@@ -12,8 +12,7 @@ from models import Level, Point
 
 def filter_reset(state):
     # notify and refresh state
-    state.levels.starting_level = 565.16
-    state.levels.target_level = 540.00
+    state.levels = Level()
     
     notify(state, "info", "Filters has been reset.")
     filter_refresh(state)
