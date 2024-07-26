@@ -2,8 +2,8 @@
 This is a sample code that tests the deployment on heroku
 
 ## Local versions
-2024.07.25: Check-in
-2024.07.26: Change project name to tapiy_success
+- 2024.07.25: Check-in
+- 2024.07.26: Change project name to tapiy_success
 
 ## main.py
 - Create instances of data models (pydantic).
