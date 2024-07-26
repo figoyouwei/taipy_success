@@ -4,7 +4,7 @@
 @update: 2024.07.26
 '''
 
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel
 
 class Level(BaseModel):
     starting_level: float = 565.16
