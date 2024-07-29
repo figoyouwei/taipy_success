@@ -90,4 +90,5 @@ sp500_pl
         .fmt_date(columns="Date", date_style="wd_m_day_year")
         #.fmt_number(columns="volume", compact=True)
         #.cols_hide(columns="adj_close")
+        .save("sp500.png", scale=3)
 )
