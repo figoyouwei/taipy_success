@@ -1,14 +1,14 @@
 """
 @author: CR7
-@software: PyCharm
+@software: vscode
 @file: export-docker.py
-@time: 2024.07.26
+@time: 2024.08.07
 """
 
 import subprocess
 def run_docker_commands(version, machine, export=False):
     # Define your commands
-    model = "taipyheroku"
+    model = "taipy_success"
     port = 9000
 
     if machine == "mac":
