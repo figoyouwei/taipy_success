@@ -21,7 +21,7 @@ if __name__ == "__main__":
 
     # Run page
     Gui(page).run(
-        title="Taipy Deployment on Heroku",
+        title="Taipy Success",
         debug=True,
         use_reloader=True,
         watermark="Made by CR7",
