@@ -1,5 +1,5 @@
 # TODO
-The ideas worth implementing
+- To simulate a real application with RestAPI.
 
 ## Current
 - User inputs: SPY, starting_level, target_level, write_time
