@@ -1,6 +1,6 @@
+# Local settings
 .vscode/
 app/__pycache__/
-poetry.lock
 
 # Content
 *.png
