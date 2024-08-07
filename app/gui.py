@@ -32,7 +32,7 @@ def setup_gui(filter_refresh, filter_reset):
     with tgb.Page() as page:
         # title line
         tgb.toggle(theme=True)
-        tgb.text("# Taipy Deployment on Heroku", mode="md", class_name="text-center pb1")
+        tgb.text("# Taipy Success", mode="md", class_name="text-center pb1")
 
         # reset button
         with tgb.layout("1", class_name="pb1"):                
@@ -68,5 +68,5 @@ def setup_gui(filter_refresh, filter_reset):
                 )
 
         # footer
-        tgb.text("Developed by Youwei Zheng", mode="md", class_name="text-center pb1")               
+        tgb.text("Developed by CR7", mode="md", class_name="text-center pb1")               
     return page
