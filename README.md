@@ -1,5 +1,6 @@
 # taipy_success
-This is a sample code that tests taipy functionality and aims to achieve success.
+This is a sample code that tests taipy functionality and aims to achieve success.<br>
+Please visit [taipy success asia](https://www.taipysuccess.asia/) for demonstration.
 
 ## Local versions
 - 2024.07.25: Check-in
