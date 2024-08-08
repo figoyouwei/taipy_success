@@ -3,5 +3,8 @@
 .vscode/
 app/__pycache__/
 
+# Configuration
+nginx.conf
+
 # Content
 *.png
