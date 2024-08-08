@@ -1,4 +1,5 @@
 # Local settings
+.DS_Store
 .vscode/
 app/__pycache__/
 
