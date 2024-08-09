@@ -26,6 +26,7 @@ if __name__ == "__main__":
     page_chatbot = page_chatbot.create_page()
 
     pages = {
+        "/": "<center><|navbar|></center>",
         "calculator": page_calculator, 
         "chatbot": page_chatbot
         }
