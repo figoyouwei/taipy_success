@@ -8,3 +8,4 @@
 
 ## Next
 - Side page with S&P Chart
+- Work plotting with the package [patchworklib](https://python.plainenglish.io/a-subplot-manager-for-intuitive-layout-in-matplotlib-bd037fe967f4)

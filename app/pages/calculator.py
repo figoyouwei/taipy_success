@@ -1,14 +1,14 @@
 '''
 @author: Youwei Zheng
-@target: Taipy GUI
-@update: 2024.07.25
+@target: Calculator page
+@update: 2024.08.09
 '''
 
 import taipy.gui.builder as tgb
 from taipy.gui import notify
 
+from models.calculator import Level
 from turing import compute_points
-from models import Level, Point
 
 def filter_reset(state):
     # notify and refresh state
@@ -27,7 +27,7 @@ def filter_refresh(state):
     state.points = compute_points(state.levels)
     notify(state, "info", "Filters applied and data updated.")
 
-def setup_gui(filter_refresh, filter_reset):
+def create_page(filter_refresh=filter_refresh, filter_reset=filter_reset):
         
     with tgb.Page() as page:
         # title line
@@ -69,4 +69,5 @@ def setup_gui(filter_refresh, filter_reset):
 
         # footer
         tgb.text("Developed by CR7", mode="md", class_name="text-center pb1")               
+    
     return page

@@ -4,7 +4,7 @@
 @update: 2024.07.25
 '''
 
-from models import Level, Point
+from models.calculator import Level, Point
 
 def compute_points(levels: Level) -> Point:
     # compute output values

@@ -5,22 +5,33 @@
 '''
 
 from taipy.gui import Gui
-from gui import setup_gui, filter_refresh, filter_reset
+
+import pages.calculator as page_calculator
+import pages.chatbot as page_chatbot
+
 from turing import compute_points
-from models import Level, Point
+from models.calculator import Level, Point
 
 if __name__ == "__main__":
+   
+    # Create calcuator page
+    page_calculator = page_calculator.create_page()
 
     # Create instances of data model
     levels = Level()
     points = Point()
     points = compute_points(levels)
-            
-    # Create instance of page
-    page = setup_gui(filter_refresh, filter_reset)
+
+    # Create calcuator page
+    page_chatbot = page_chatbot.create_page()
+
+    pages = {
+        "calculator": page_calculator, 
+        "chatbot": page_chatbot
+        }
 
     # Run page
-    Gui(page).run(
+    Gui(pages).run(
         title="Taipy Success",
         debug=True,
         use_reloader=True,
