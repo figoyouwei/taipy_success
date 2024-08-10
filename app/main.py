@@ -32,7 +32,7 @@ if __name__ == "__main__":
         }
 
     # Run page
-    Gui(pages).run(
+    Gui(pages=pages).run(
         title="Taipy Success",
         debug=True,
         use_reloader=True,
