@@ -1,6 +1,6 @@
 '''
 @author: Youwei Zheng
-@target: Calculator page
+@target: 佣金计算器
 @update: 2024.08.09
 '''
 

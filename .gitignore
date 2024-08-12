@@ -2,6 +2,8 @@
 .DS_Store
 .vscode/
 **/__pycache__/
+**/user_data/
+**/.taipy/
 
 # Configuration
 nginx.conf
