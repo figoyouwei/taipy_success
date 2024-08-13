@@ -27,6 +27,10 @@ def filter_refresh(state):
     state.points = compute_points(state.levels)
     notify(state, "info", "Filters applied and data updated.")
 
+# ------------------------------
+# Creating page object
+# ------------------------------
+
 def create_page(filter_refresh=filter_refresh, filter_reset=filter_reset):
         
     with tgb.Page() as page:
@@ -53,7 +57,7 @@ def create_page(filter_refresh=filter_refresh, filter_reset=filter_reset):
         with tgb.layout("1 1", class_name="pb1"):
             # Starting level
             with tgb.part(class_name="card text-center"):
-                tgb.input(
+                tgb.number(
                     label="Starting level",
                     value="{levels.starting_level}",
                     on_change=filter_refresh
@@ -61,7 +65,7 @@ def create_page(filter_refresh=filter_refresh, filter_reset=filter_reset):
             
             # Target level
             with tgb.part(class_name="card text-center"):
-                tgb.input(
+                tgb.number(
                     label="Target level",
                     value="{levels.target_level}",
                     on_change=filter_refresh
