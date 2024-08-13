@@ -1,48 +1,31 @@
 '''
 @author: Youwei Zheng
 @target: Data Models
-@update: 2024.07.26
+@update: 2024.08.13
 '''
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator
+
+# ------------------------------
+# User input levels
+# ------------------------------
 
 class Level(BaseModel):
-    starting_level: float = 565.16
-    target_level: float = 540.00
+    starting_level: float = Field(default=565.16)
+    target_level: float = Field(default=540.00)
+    
+    @field_validator('starting_level', 'target_level')
+    def round_two_digits(cls, value):
+        return round(value, 2)
 
-    # def update(self) -> None:
-    #     """Update the model with new values.
-        
-    #     Args:
-    #         starting_level (str): The new starting level as a string.
-    #         target_level (str): The new target level as a string.
-        
-    #     Raises:
-    #         ValueError: If the input values cannot be converted to float.
-    #     """
-
-    #     try:
-    #         self.starting_level = self.starting_level
-    #         self.target_level = self.target_level
-    #     except ValueError:
-    #         raise ValueError("Invalid input values")
+# ------------------------------
+# Turing points of difference
+# ------------------------------
 
 class Point(BaseModel):
     points_net: float = 0.0
     points_pct: float = 0.0
-    
-    def update(self) -> None:
-        """Update the model with new values or formats.
-        
-        Args: 
-            self
-        
-        Raises:
-            ValueError: If the input values cannot be rounded.
-        """
 
-        try:
-            self.points_net = round(self.points_net, 2)
-            self.points_pct = round(self.points_pct, 2)
-        except ValueError:
-            raise ValueError("Invalid input values")    
+    @field_validator('points_net', 'points_pct')
+    def round_two_digits(cls, value):
+        return round(value, 2)

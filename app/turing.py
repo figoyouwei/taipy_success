@@ -1,7 +1,7 @@
 '''
 @author: Youwei Zheng
 @target: Backend computation
-@update: 2024.07.25
+@update: 2024.08.13
 '''
 
 from models.calculator import Level, Point
@@ -19,6 +19,6 @@ def compute_points(levels: Level) -> Point:
         points_net=points_net,
         points_pct=points_pct
     )
-    points.update()
+    # points.update()
 
     return points

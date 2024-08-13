@@ -1,7 +1,7 @@
 '''
 @author: Youwei Zheng
 @target: Main app
-@update: 2024.07.25
+@update: 2024.08.13
 '''
 
 from taipy.gui import Gui
