@@ -11,26 +11,26 @@ import polars as pl
 # Download dataset
 # ------------------------------
 
-def download_data_sp500():
+def download_yfin(ticker_symbol: str):
     import yfinance as yf
 
-    # Define the ticker symbol for S&P 500
-    ticker_symbol = '^GSPC'
+    # ticker symbol for S&P 500: 'SPX'
+    # ticker symbol for Ndq 100: '^NDX'
 
     # Fetch the data for the year 2024
-    sp500_data_yf = yf.download(ticker_symbol, start='2024-01-01', end='2024-12-31')
-    sp500_data_yf.reset_index(inplace=True)
+    data_yf = yf.download(ticker_symbol, start='2024-01-01', end='2024-12-31')
+    data_yf.reset_index(inplace=True)
 
-    return sp500_data_yf
+    return data_yf
 
 # ------------------------------
 # Process dataset
 # ------------------------------
 
-def process_data_sp500(sp500_data: pd.DataFrame) -> pd.DataFrame:
+def process_data_yfin(data_yfin: pd.DataFrame) -> pd.DataFrame:
     # Process pl.dataframe
-    sp500_data_pl = (
-        pl.from_pandas(sp500_data)
+    data_yfin_pl = (
+        pl.from_pandas(data=data_yfin)
         .drop("Adj Close")
         # Format existing 5 indicators
         .with_columns([
@@ -51,7 +51,7 @@ def process_data_sp500(sp500_data: pd.DataFrame) -> pd.DataFrame:
         .sort(by="Date", descending=True)
     )
     
-    return sp500_data_pl.to_pandas()
+    return data_yfin_pl.to_pandas()
 
 # ------------------------------
 # Creating scenario
@@ -102,7 +102,8 @@ def create_scenario(
 
 if __name__ == "__main__":
     # Run data
-    data_input = download_data_sp500()
+    symbol = '^NDX'
+    data_input = download_yfin()
     data_input
 
     # Creation of the scenario and execution

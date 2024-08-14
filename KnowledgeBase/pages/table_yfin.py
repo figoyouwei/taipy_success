@@ -26,7 +26,7 @@ food_df = pd.DataFrame({
     
 def create_page(df_table: str):
     with tgb.Page() as page:
-        tgb.text("# S&P 500 Daily Data, Not Future", mode="md", class_name="text-center pb1")
+        tgb.text("# US Stock Daily Index, Not Future", mode="md", class_name="text-center pb1")
 
         tgb.table(
             df_table,
@@ -45,23 +45,23 @@ def create_page(df_table: str):
 # Main app
 # ------------------------------
 
-from scenarios.sp500 import (
-    download_data_sp500, 
-    process_data_sp500, 
+from scenarios.yfin import (
+    download_yfin, 
+    process_data_yfin, 
     create_scenario
 )
 
 import taipy as tp
 
 if __name__ == "__main__":
-
     # Run data
-    data_input = download_data_sp500()
+    symbol = '^SPX'
+    data_input = download_yfin(ticker_symbol=symbol)
     data_input
 
     # Creation of the scenario and execution
     scenario = create_scenario(
-        tool2call=process_data_sp500,
+        tool2call=process_data_yfin,
         node_input_name="data_in",
         node_output_name="data_out",
         task_id="task",
@@ -71,10 +71,10 @@ if __name__ == "__main__":
     scenario.data_in.write(data_input)
     tp.submit(scenario)
 
-    df_sp500 = scenario.data_out.read()
+    df_yfin = scenario.data_out.read()
     
     # Create and run
-    df_table = "{df_sp500}"
+    df_table = "{df_yfin}"
     page = create_page(df_table=df_table)
     Gui(page=page).run(
         debug=True
