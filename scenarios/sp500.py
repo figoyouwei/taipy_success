@@ -1,34 +1,33 @@
 '''
 @author: Youwei Zheng
-@target: scenario for Beginner with yfinance data
-@update: 2024.08.12
+@target: taipy scenario with yfinance
+@update: 2024.08.14
 '''
 
-# ------------------------------
-# Creating sample dataset
-# ------------------------------
-
-import yfinance as yf
 import pandas as pd
 import polars as pl
 
-# Define the ticker symbol for S&P 500
-ticker_symbol = '^GSPC'
-
-# Fetch the data for the year 2024
-sp500_data_yf = yf.download(ticker_symbol, start='2024-01-01', end='2024-12-31')
-sp500_data_yf.reset_index(inplace=True)
-
-# Display the first few rows of the data
-# sp500_data_pl = pl.from_pandas(sp500_data_yf)
-# sp500_data_pl
-# print(sp500_data_pl.head())
-
 # ------------------------------
-# Creating task function
+# Download dataset
 # ------------------------------
 
-def task_format_sp500(sp500_data: pd.DataFrame) -> pl.DataFrame:
+def download_data_sp500():
+    import yfinance as yf
+
+    # Define the ticker symbol for S&P 500
+    ticker_symbol = '^GSPC'
+
+    # Fetch the data for the year 2024
+    sp500_data_yf = yf.download(ticker_symbol, start='2024-01-01', end='2024-12-31')
+    sp500_data_yf.reset_index(inplace=True)
+
+    return sp500_data_yf
+
+# ------------------------------
+# Process dataset
+# ------------------------------
+
+def process_data_sp500(sp500_data: pd.DataFrame) -> pd.DataFrame:
     # Process pl.dataframe
     sp500_data_pl = (
         pl.from_pandas(sp500_data)
@@ -43,7 +42,7 @@ def task_format_sp500(sp500_data: pd.DataFrame) -> pl.DataFrame:
         ])
         # Compute new indicator Range
         .with_columns([
-            (pl.col("High") - pl.col("Low")).alias("Range")
+            (pl.col("High") - pl.col("Low")).round(2).alias("Range")
         ])    
         # Compute percentage of Range to Open
         .with_columns([
@@ -52,45 +51,71 @@ def task_format_sp500(sp500_data: pd.DataFrame) -> pl.DataFrame:
         .sort(by="Date", descending=True)
     )
     
-    return sp500_data_pl
-    
-# sp500_data_pl = task_format_sp500(sp500_data)
-# sp500_data_pl.head(20)
+    return sp500_data_pl.to_pandas()
 
 # ------------------------------
 # Creating scenario
 # ------------------------------
 
+import taipy as tp
 from taipy import Config as tpc
 
-# Configuration of nodes
-node_sp500_data_yf = tpc.configure_data_node("sp500_data_yf")
-node_sp500_data = tpc.configure_data_node("sp500_data")
+from typing import Callable
 
-# Configuration of tasks
-task_sp500 = tpc.configure_task(
-    id="task_sp500_data",
-    function=task_format_sp500,
-    input=node_sp500_data_yf,
-    output=node_sp500_data
-    )
+def create_scenario(
+    tool2call: Callable, 
+    node_input_name: str,
+    node_output_name: str,
+    task_id: str, 
+    scenario_id: str
+    ):
 
-# Configuration of scenario
-scenario_sp500 = tpc.configure_scenario(
-    id="sp500",
-    task_configs=[task_sp500]
-    )
+    # Configurate nodes
+    node_input = tpc.configure_data_node(node_input_name)
+    node_output = tpc.configure_data_node(node_output_name)
 
-import taipy as tp
+    # Configurate task
+    task_cfg = tpc.configure_task(
+        id=task_id,
+        function=tool2call,
+        input=node_input,
+        output=node_output
+        )
 
-if __name__ == "__main__":
-    # Run of the Core
+    # Configuration of scenario
+    scenario_cfg = tpc.configure_scenario(
+        id=scenario_id,
+        task_configs=[task_cfg]
+        )
+
+    # Run core
     tp.Core().run()
 
+    # Create scenario client
+    scenario = tp.create_scenario(scenario_cfg)
+
+    return scenario
+
+# ------------------------------
+# Main app
+# ------------------------------
+
+if __name__ == "__main__":
+    # Run data
+    data_input = download_data_sp500()
+    data_input
+
     # Creation of the scenario and execution
-    scenario = tp.create_scenario(scenario_sp500)
-    scenario.sp500_data_yf.write(sp500_data_yf)
+    scenario = create_scenario(
+        tool2call=process_data_sp500,
+        node_input_name="data_in",
+        node_output_name="data_out",
+        task_id="task",
+        scenario_id="scenario"
+    )
+    
+    scenario.data_in.write(data_input)
     tp.submit(scenario)
 
-    sp500_data_pl = scenario.sp500_data.read()
-    sp500_data_pl
+    data_sp500 = scenario.data_out.read()
+    type(data_sp500)

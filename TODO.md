@@ -3,7 +3,8 @@
 - 43.134.197.145:9000
 
 # Question
-- How to change the name of navbar
+- How to change the name of navbar.
+- How to schedule scenario.
 
 ## Current
 - User inputs: SPY, starting_level, target_level, write_time
