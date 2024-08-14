@@ -108,7 +108,7 @@ if __name__ == "__main__":
 
     # Creation of the scenario and execution
     scenario = create_scenario(
-        tool2call=process_data_sp500,
+        tool2call=process_data_yfin,
         node_input_name="data_in",
         node_output_name="data_out",
         task_id="task",
