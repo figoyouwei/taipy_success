@@ -11,14 +11,25 @@ import polars as pl
 # Download dataset
 # ------------------------------
 
-def download_yfin(ticker_symbol: str):
+def download_yfin(
+    ticker_symbol: str, 
+    interval: str,
+    start_date: str,
+    end_date: str
+    ):
+
     import yfinance as yf
 
-    # ticker symbol for S&P 500: 'SPX'
+    # ticker symbol for S&P 500: '^SPX'
     # ticker symbol for Ndq 100: '^NDX'
 
     # Fetch the data for the year 2024
-    data_yf = yf.download(ticker_symbol, start='2024-01-01', end='2024-12-31')
+    data_yf = yf.download(
+        tickers=ticker_symbol, 
+        interval=interval,
+        start=start_date, 
+        end=end_date
+        )
     data_yf.reset_index(inplace=True)
 
     return data_yf
@@ -102,8 +113,19 @@ def create_scenario(
 
 if __name__ == "__main__":
     # Run data
-    symbol = '^NDX'
-    data_input = download_yfin()
+    symbol, itv, start_date, end_date = (
+        '^SPX',
+        '30m',
+        '2024-08-01',
+        '2024-08-13',
+    )
+
+    data_input = download_yfin(
+        ticker_symbol=symbol,
+        interval=itv,
+        start_date=start_date,
+        end_date=end_date
+        )
     data_input
 
     # Creation of the scenario and execution

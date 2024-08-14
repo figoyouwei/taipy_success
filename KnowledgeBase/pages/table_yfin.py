@@ -6,22 +6,11 @@
 '''
 
 import taipy.gui.builder as tgb
-from taipy.gui import Gui, Markdown, notify
+from taipy.gui import Gui, notify
 import pandas as pd
 
 # ------------------------------
-# food df
-# ------------------------------
-
-food_df = pd.DataFrame({
-    "Meal": ["Lunch", "Dinner", "Lunch", "Lunch", "Breakfast", "Breakfast", "Lunch", "Dinner"],
-    "Category": ["Food", "Food", "Drink", "Food", "Food", "Drink", "Dessert", "Dessert"],
-    "Name": ["Burger", "Pizza", "Soda", "Salad", "Pasta", "Water", "Ice Cream", "Cake"],
-    "Calories": [300, 400, 150, 200, 500, 0, 400, 500],
-})
-
-# ------------------------------
-# sp500 df
+# stock df
 # ------------------------------
     
 def create_page(df_table: str):
