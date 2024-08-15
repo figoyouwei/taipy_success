@@ -4,6 +4,7 @@
 
 # Question
 - How to change the name of navbar.
+- What's the meaning of scenario_1.submit(wait=True, timeout=5)
 - How to schedule scenario.
 
 ## Current
