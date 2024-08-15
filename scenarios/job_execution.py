@@ -15,13 +15,9 @@ def double(nb):
     return nb * 2
 
 def add(nb):
-    print("Wait 2 seconds in add function")
-    time.sleep(2)
     return nb + 10
 
 def sub(nb):
-    print("Wait 3 seconds in sub function")
-    time.sleep(3)
     return nb - 19
 
 if __name__=="__main__":
@@ -91,10 +87,32 @@ if __name__=="__main__":
     # scenario_1.data_nodes['data_in'].read()
 
     # 3.submit
-    scenario_1.submit()
+    scenario_1.submit(wait=True)
 
-    # 4.output
-    data_out = scenario_1.data_nodes['data_out'].read()
-    print(data_out)
+    try:
+        # 4. Wait and check until data is ready
+        max_attempts = 10  # Maximum number of attempts before giving up
+        attempt = 0
+        wait_time = 2  # Time to wait between attempts in seconds
+        
+        while attempt < max_attempts:
+            if scenario_1.data_nodes['data_out'].is_ready_for_reading:
+                data_out = scenario_1.data_nodes['data_out'].read()
+                print(data_out)
+                break
+            else:
+                print(f"Attempt {attempt + 1}: Data output is not ready for reading. Waiting...")
+                attempt += 1
+                time.sleep(wait_time)
+        
+        if attempt == max_attempts:
+            print("Data output is still not ready after maximum attempts. Exiting...")
+            
+    except KeyError as e:
+        print(f"Error: Missing key in data_nodes dictionary - {e}")
+    except AttributeError as e:
+        print(f"Error: Attribute not found - {e}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
     
     tp.Core().stop()
