@@ -8,6 +8,8 @@ max_nb_of_workers = "2:int"
 
 [DATA_NODE.intermediate]
 
+[DATA_NODE.data_sub]
+
 [DATA_NODE.data_out]
 
 [TASK.double]
@@ -19,13 +21,19 @@ skippable = "False:bool"
 [TASK.add]
 function = "__main__.add:function"
 inputs = [ "intermediate:SECTION",]
+outputs = [ "data_sub:SECTION",]
+skippable = "False:bool"
+
+[TASK.sub]
+function = "__main__.sub:function"
+inputs = [ "data_sub:SECTION",]
 outputs = [ "data_out:SECTION",]
 skippable = "False:bool"
 
-[SCENARIO.two_scenarios]
-tasks = [ "double:SECTION", "add:SECTION",]
+[SCENARIO.calculator]
+tasks = [ "double:SECTION", "add:SECTION", "sub:SECTION",]
 additional_data_nodes = []
 
-[SCENARIO.two_scenarios.comparators]
+[SCENARIO.calculator.comparators]
 
-[SCENARIO.two_scenarios.sequences]
+[SCENARIO.calculator.sequences]

@@ -15,9 +15,14 @@ def double(nb):
     return nb * 2
 
 def add(nb):
-    print("Wait 5 seconds in add function")
-    time.sleep(5)
+    print("Wait 2 seconds in add function")
+    time.sleep(2)
     return nb + 10
+
+def sub(nb):
+    print("Wait 3 seconds in sub function")
+    time.sleep(3)
+    return nb - 19
 
 if __name__=="__main__":
     # ------------------------------
@@ -30,34 +35,44 @@ if __name__=="__main__":
         max_nb_of_workers=2
         )
 
-    data_in = 8
+    data_in = 16
 
     # Configuration of Data Nodes
     input_node = Config.configure_data_node("data_in")
     intermediate_node = Config.configure_data_node("intermediate")
+    sub_node = Config.configure_data_node("data_sub")
     output_node = Config.configure_data_node("data_out")
 
     # Configuration of tasks
     first_task_cfg = Config.configure_task(
-        "double",
-        double,
-        input_node,
-        intermediate_node
+        id="double",
+        function=double,
+        input=input_node,
+        output=intermediate_node
         )
 
     second_task_cfg = Config.configure_task(
-        "add",
-        add,
-        intermediate_node,
-        output_node
+        id="add",
+        function=add,
+        input=intermediate_node,
+        output=sub_node
+        )
+
+    third_task_cfg = Config.configure_task(
+        id="sub",
+        function=sub,
+        input=sub_node,
+        output=output_node
         )
 
     # Configuration of the scenario
     scenario_cfg = Config.configure_scenario(
-        id="two_scenarios",
+        id="calculator",
         task_configs=[
             first_task_cfg,
-            second_task_cfg]
+            second_task_cfg,
+            third_task_cfg
+            ]
         )
 
     Config.export("config.toml")
@@ -73,7 +88,7 @@ if __name__=="__main__":
 
     # 2.initialize input
     scenario_1.data_nodes['data_in'].write(data_in)
-    scenario_1.data_nodes['data_in'].read()
+    # scenario_1.data_nodes['data_in'].read()
 
     # 3.submit
     scenario_1.submit()
