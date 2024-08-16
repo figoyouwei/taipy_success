@@ -1,7 +1,7 @@
 '''
 @author: Youwei Zheng
-@target: taipy scenario with yfinance
-@update: 2024.08.14
+@target: tools with yfinance
+@update: 2024.08.16
 '''
 
 import pandas as pd
@@ -11,26 +11,43 @@ import polars as pl
 # Download dataset
 # ------------------------------
 
-def download_yfin(
-    ticker_symbol: str, 
-    interval: str,
-    start_date: str,
-    end_date: str
-    ):
+import yfinance as yf
+import pandas as pd
+from datetime import datetime
 
-    import yfinance as yf
+def download_yfin(args_in: tuple) -> pd.DataFrame:
+    """
+    Downloads historical stock data from Yahoo Finance.
 
-    # ticker symbol for S&P 500: '^SPX'
-    # ticker symbol for Ndq 100: '^NDX'
+    Parameters:
+    - args_in (tuple): A tuple containing the ticker symbol, interval, start date, and end date.
 
-    # Fetch the data for the year 2024
-    data_yf = yf.download(
-        tickers=ticker_symbol, 
-        interval=interval,
-        start=start_date, 
-        end=end_date
-        )
-    data_yf.reset_index(inplace=True)
+    Returns:
+    - pd.DataFrame: DataFrame containing the historical stock data.
+    """
+
+    ticker_symbol, interval, start_date, end_date = args_in
+
+    # Validate input parameters
+    try:
+        datetime.strptime(start_date, '%Y-%m-%d')
+        datetime.strptime(end_date, '%Y-%m-%d')
+    except ValueError:
+        raise ValueError("Invalid date format. Please use 'YYYY-MM-DD'.")
+
+    valid_intervals = ['1m', '2m', '5m', '15m', '30m', '60m', '90m', '1h', '1d', '5d', '1wk', '1mo', '3mo']
+    if interval not in valid_intervals:
+        raise ValueError(f"Invalid interval '{interval}'. Valid intervals are: {valid_intervals}")
+
+    if not ticker_symbol:
+        raise ValueError("Ticker symbol must not be empty.")
+
+    # Download data
+    try:
+        data_yf = yf.download(tickers=ticker_symbol, interval=interval, start=start_date, end=end_date)
+        data_yf.reset_index(inplace=True)
+    except Exception as e:
+        raise RuntimeError(f"An error occurred while downloading data: {e}")
 
     return data_yf
 

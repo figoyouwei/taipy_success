@@ -17,7 +17,7 @@ if __name__ == "__main__":
     # Create calcuator page
     page_calculator = page_calculator.create_page()
 
-    # Create instances of data model
+    # Create data instances of calculator model
     levels = Level()
     points = Point()
     points = compute_points(levels)

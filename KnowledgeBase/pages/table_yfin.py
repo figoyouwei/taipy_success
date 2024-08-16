@@ -34,7 +34,7 @@ def create_page(df_table: str):
 # Main app
 # ------------------------------
 
-from scenarios.yfin import (
+from app.tools.yfin import (
     download_yfin, 
     process_data_yfin, 
     create_scenario
