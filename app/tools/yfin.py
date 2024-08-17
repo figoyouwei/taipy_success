@@ -44,6 +44,7 @@ def download_yfin(args_in: tuple) -> pd.DataFrame:
 
     # Download data
     try:
+        print("Downloading from yfin...")
         data_yf = yf.download(tickers=ticker_symbol, interval=interval, start=start_date, end=end_date)
         data_yf.reset_index(inplace=True)
     except Exception as e:
@@ -55,7 +56,8 @@ def download_yfin(args_in: tuple) -> pd.DataFrame:
 # Process dataset
 # ------------------------------
 
-def process_data_yfin(data_yfin: pd.DataFrame) -> pd.DataFrame:
+def process_yfin(data_yfin: pd.DataFrame) -> pd.DataFrame:
+    print("Processing data from yfin...")
     # Process pl.dataframe
     data_yfin_pl = (
         pl.from_pandas(data=data_yfin)

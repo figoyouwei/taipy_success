@@ -3,8 +3,7 @@
 - 43.134.197.145:9000
 
 # Question
-- How to change the name of navbar.
-- What's the meaning of scenario_1.submit(wait=True, timeout=5)
+- Run two scenarios with spx and ndx, fetch data.
 - How to schedule scenario.
 
 ## Current

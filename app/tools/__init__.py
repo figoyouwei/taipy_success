@@ -1,1 +1,1 @@
-from .yfin import download_yfin
+from .yfin import download_yfin, process_yfin
