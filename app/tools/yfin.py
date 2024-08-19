@@ -49,6 +49,7 @@ def download_yfin(args_in: tuple) -> pd.DataFrame:
         print("Downloading from yfin...")
         data_yf = yf.download(tickers=ticker_symbol, interval=interval, start=start_date, end=end_date)
         data_yf.reset_index(inplace=True)
+        # data_yf = data_yf.drop(columns=["Adj Close"])
     except Exception as e:
         raise RuntimeError(f"An error occurred while downloading data: {e}")
 

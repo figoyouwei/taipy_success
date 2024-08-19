@@ -1,1 +1,1 @@
-from .yfin import YfinSPX
+from .yfin import SPX, NDX

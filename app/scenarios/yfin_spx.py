@@ -9,7 +9,7 @@ from datetime import datetime
 import taipy as tp
 from taipy.core.config import Config as tcc # TaipyCoreConfig
 
-from app.models.yfin import YfinSPX
+from app.models.yfin import SPX, NDX
 
 from app.tools import download_yfin, process_yfin
 from app.tools import DB_SQLITE_MANAGER
@@ -20,24 +20,31 @@ current_date = datetime.now().strftime('%Y-%m-%d')
 args_in = (
     '^SPX',
     '1d',
-    '2024-08-01',
+    '2024-08-05',
     current_date,
     )
 
-# tool verified
+# ------------------------------
+# Verify workflow without scenario
+# ------------------------------
+
+# download
 df = download_yfin(args_in)
-df = df.drop(columns=["Adj Close"])
-df.dtypes
+df
 
-# database verified
+# process
+df_pcs = process_yfin(df)
+df_pcs
+
+# # commit
 db_manager = DB_SQLITE_MANAGER('app/databases/yfin.db')
-table_spx_daily = db_manager.create_table('spx_daily', YfinSPX)
-table_spx_daily
-db_manager.commit_data(table_spx_daily, df)
-result = db_manager.query_data(table_spx_daily)
-result
+db_manager.create_table(SPX)
+db_manager.commit_data(df_pcs)
 
-# Put the rest of your code in this "if"
+# ------------------------------
+# Main app
+# ------------------------------
+
 if __name__ == "__main__":
     # Configure job execution mode
     tcc.configure_job_executions(mode="standalone", max_nb_of_workers=2)
@@ -50,14 +57,22 @@ if __name__ == "__main__":
     # Configuration of tasks
     task_cfg_yfin = tcc.configure_task(
         id="task_yfin", function=download_yfin, input=node_yfin_args_in, output=node_yfin
-    )
+        ) # download
     task_cfg_yfin_pcs = tcc.configure_task(
         id="task_yfin_pcs", function=process_yfin, input=node_yfin, output=node_yfin_pcs
-    )
-
+        ) # process
+    task_cfg_yfin_cmt = tcc.configure_task(
+        id="task_yfin_cmt", function=db_manager.commit_data, input=node_yfin_pcs
+        ) # commit
+    
     # Configuration of scenario
     scenario_cfg_yfin = tcc.configure_scenario(
-        id="scenario_yfin", task_configs=[task_cfg_yfin, task_cfg_yfin_pcs]
+        id="scenario_yfin", 
+        task_configs=[
+            task_cfg_yfin, 
+            task_cfg_yfin_pcs,
+            task_cfg_yfin_cmt
+            ]
     )
 
     # ------------------------------
@@ -76,6 +91,8 @@ if __name__ == "__main__":
 
     # 3.submit: error freeze_support()
     scenario_yin.submit(wait=True, timeout=120)
+
+    # 4.verify output
     data_out = scenario_yin.data_nodes["node_yfin_pcs"].read()
     print(data_out)
 

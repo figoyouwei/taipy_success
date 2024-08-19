@@ -5,7 +5,7 @@
 '''
 
 from app.models.yfin import YfinSPX
-from app.tools.db_sqlite import DBManager
+from app.tools.db_manager import DBManager
 import pandas as pd
 
 # ------------------------------
