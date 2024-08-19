@@ -1,23 +1,29 @@
 '''
 @author: Youwei Zheng
 @target: scenarios with yfinance, run main?
-@update: 2024.08.17
+@update: 2024.08.19
 '''
+
+from datetime import datetime
 
 import taipy as tp
 from taipy.core.config import Config as tcc # TaipyCoreConfig
 
 from app.tools import download_yfin, process_yfin
 
+# Get the current date as a string
+current_date = datetime.now().strftime('%Y-%m-%d')
+
 args_in = (
     '^SPX',
     '1d',
     '2024-08-01',
-    '2024-08-15',    
+    current_date,
     )
 
 # tool verified
 # df = download_yfin(args_in)
+# df
 
 # Put the rest of your code in this "if"
 if __name__ == "__main__":

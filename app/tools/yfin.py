@@ -21,7 +21,9 @@ def download_yfin(args_in: tuple) -> pd.DataFrame:
 
     Parameters:
     - args_in (tuple): A tuple containing the ticker symbol, interval, start date, and end date.
-
+    ^SPX, ^NDX
+    ES=F, NQ=F
+    
     Returns:
     - pd.DataFrame: DataFrame containing the historical stock data.
     """
@@ -149,7 +151,7 @@ if __name__ == "__main__":
 
     # Creation of the scenario and execution
     scenario = create_scenario(
-        tool2call=process_data_yfin,
+        tool2call=process_yfin,
         node_input_name="data_in",
         node_output_name="data_out",
         task_id="task",

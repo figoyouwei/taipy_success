@@ -3,7 +3,7 @@
 - 43.134.197.145:9000
 
 # Question
-- Run two scenarios with spx and ndx, fetch data.
+- Run two scenarios and save data to sqlite with insert_many() using package pydantic_sqlite.
 - How to schedule scenario.
 
 ## Current
