@@ -10,3 +10,6 @@ nginx.conf
 
 # Content
 *.png
+
+# Database
+app/databases/

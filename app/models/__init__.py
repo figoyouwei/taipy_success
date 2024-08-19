@@ -1,0 +1,1 @@
+from .yfin import YfinSPX

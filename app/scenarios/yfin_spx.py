@@ -9,7 +9,10 @@ from datetime import datetime
 import taipy as tp
 from taipy.core.config import Config as tcc # TaipyCoreConfig
 
+from app.models.yfin import YfinSPX
+
 from app.tools import download_yfin, process_yfin
+from app.tools import DB_SQLITE_MANAGER
 
 # Get the current date as a string
 current_date = datetime.now().strftime('%Y-%m-%d')
@@ -22,8 +25,17 @@ args_in = (
     )
 
 # tool verified
-# df = download_yfin(args_in)
-# df
+df = download_yfin(args_in)
+df = df.drop(columns=["Adj Close"])
+df.dtypes
+
+# database verified
+db_manager = DB_SQLITE_MANAGER('app/databases/yfin.db')
+table_spx_daily = db_manager.create_table('spx_daily', YfinSPX)
+table_spx_daily
+db_manager.commit_data(table_spx_daily, df)
+result = db_manager.query_data(table_spx_daily)
+result
 
 # Put the rest of your code in this "if"
 if __name__ == "__main__":
