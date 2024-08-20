@@ -67,7 +67,7 @@ if __name__ == "__main__":
         id="task_yfin_pcs", function=process_yfin, input=node_yfin, output=node_yfin_pcs
         ) # process
     task_cfg_yfin_cmt = tcc.configure_task(
-        id="task_yfin_cmt", function=commit_data_yfin, input=node_yfin_pcs
+        id="task_yfin_cmt", function=db_manager.commit_data, input=node_yfin_pcs
         ) # commit
     
     # Configuration of scenario
