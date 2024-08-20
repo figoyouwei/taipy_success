@@ -14,7 +14,6 @@ past_conversations = []
 selected_conv = None
 selected_row = [1]
 
-
 def on_init(state: State) -> None:
     """
     Initialize the app.

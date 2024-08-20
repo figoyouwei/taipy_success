@@ -1,3 +1,6 @@
+# Env
+.env
+
 # Local settings
 .DS_Store
 .vscode/
