@@ -18,7 +18,7 @@ from ice_breaker import ice_breaker_with
 def on_filter(state):
     try:
         res, data = ice_breaker_with(state.userinput)
-        # tgb.progress(value="50", linear="True")
+        state.render_progress = True
         state.summary_info = res.summary
         state.facts = res.facts
         notify(state, "info", "Filters applied and data updated.")
@@ -71,6 +71,11 @@ if __name__ == "__main__":
     userinput = ""
     summary_info = ""
     facts = []
+
+    # progress settings?
+    render_progress = False
+    progress_value = None
+    tgb.progress("{progress_value }", render="{render_progress}")
 
     page = create_page()
 
