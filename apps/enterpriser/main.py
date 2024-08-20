@@ -53,6 +53,9 @@ def create_page():
                     class_name="text-center"
                 )
 
+        # progress element
+        tgb.progress("{progress_value }", render="{render_progress}")
+
         # Summary area
         tgb.text("{summary_info}", mode="md", class_name="text-left pb1")
 
@@ -75,7 +78,6 @@ if __name__ == "__main__":
     # progress settings?
     render_progress = False
     progress_value = None
-    tgb.progress("{progress_value }", render="{render_progress}")
 
     page = create_page()
 
