@@ -18,6 +18,7 @@ from ice_breaker import ice_breaker_with
 def on_filter(state):
     try:
         res, data = ice_breaker_with(state.userinput)
+        # tgb.progress(value="50", linear="True")
         state.summary_info = res.summary
         state.facts = res.facts
         notify(state, "info", "Filters applied and data updated.")
