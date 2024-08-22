@@ -1,6 +1,3 @@
-import os
-import sys
-
 from taipy.gui import Gui, notify, Icon, navigate
 import openai
 import taipy.gui.builder as tgb
@@ -8,6 +5,10 @@ from openai_utils import request
 from stateclass import State
 from typing import List, Optional
 
+import os
+from dotenv import find_dotenv, load_dotenv
+
+load_dotenv(find_dotenv())
 
 # Global OpenAI client
 client: openai.Client = None
@@ -23,8 +24,8 @@ conversation: List[List[str]] = [
 ]
 
 users: List[List[str]] = [
-    ["Human", Icon("/images/human_icon.png", "Human.png")],
-    ["AI", Icon("/images/ai_icon.png", "AI.png")],
+    ["Human", Icon("/images/icon_hm.png", "Human.png")],
+    ["AI", Icon("/images/icon_ai.png", "AI.png")],
 ]
 
 selected_conv: Optional[List[List[str]]] = None
@@ -44,6 +45,9 @@ def on_init(state: State) -> None:
     state.conversation = conversation.copy()
     state.past_conversations = []
     state.selected_conv = None
+    
+    # init client?
+    # state.client = client
 
 
 def update_context(state: State, current_user_message) -> str:
@@ -172,18 +176,15 @@ with tgb.Page() as page:
 
 # Main entry point
 if __name__ == "__main__":
-    if "OPENAI_API_KEY" in os.environ:
-        api_key = os.environ["OPENAI_API_KEY"]
-    elif len(sys.argv) > 1:
-        api_key = sys.argv[1]
-    else:
-        api_key = None
-        # raise ValueError(
-        #     "Please provide the OpenAI API key as an environment variable OPENAI_API_KEY or as a command line argument."
-        # )
+    # Retrieve the API key from the environment variable
+    openai_api_key = os.getenv("OPENAI_API_KEY")
+    
+    # Raise an error if the API key is not found
+    if not openai_api_key:
+        raise ValueError("Please provide the OpenAI API key as an environment variable 'LANGCHAIN_API_KEY' or as a command line argument.")
 
-    client = None  # openai.Client(api_key=api_key)
+    client = openai.Client(api_key=openai_api_key)
 
     gui = Gui(page)
     chat = gui.add_partial(build_chat())
-    gui.run(dark_mode=True, title="💬 Taipy Chat")
+    gui.run(dark_mode=True, title="Taipy Chat Demo v4.0")

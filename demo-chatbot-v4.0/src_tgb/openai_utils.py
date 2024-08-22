@@ -13,16 +13,15 @@ def request(state: State, prompt: str) -> str:
         The response from the API.
     """
     print(prompt)
-    random_response = [
-        "How are you?",
-        "What are you doing?",
-        "What is your name?",
-        "Who are you?",
-    ]
 
-    import numpy as np
-
-    return random_response[np.random.randint(0, 4)]
+    # random_response = [
+    #     "How are you?",
+    #     "What are you doing?",
+    #     "What is your name?",
+    #     "Who are you?",
+    # ]
+    # import numpy as np
+    # return random_response[np.random.randint(0, 4)]
 
     response = state.client.chat.completions.create(
         messages=[
@@ -33,4 +32,5 @@ def request(state: State, prompt: str) -> str:
         ],
         model="gpt-4-turbo-preview",
     )
+    
     return response.choices[0].message.content
