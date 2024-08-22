@@ -1,5 +1,6 @@
 # Env
 .env
+TaipyEnterprise.md
 
 # Local settings
 .DS_Store
@@ -12,6 +13,7 @@
 nginx.conf
 
 # Content
+TODO.md
 *.png
 
 # Database
