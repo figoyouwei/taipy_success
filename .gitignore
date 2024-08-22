@@ -21,3 +21,8 @@ TODO.md
 
 # Database
 app/databases/
+
+# Enterprise
+scenarios/poetry.lock
+scenarios/pyproject.toml
+
