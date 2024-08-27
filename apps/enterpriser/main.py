@@ -1,7 +1,7 @@
 '''
 @author: Youwei Zheng
-@target: Taipy Frontend
-@update: 2024.08.20
+@target: Taipy Frontend of Icebreaker app.
+@update: 2024.08.26
 '''
 
 from taipy.gui import Gui
@@ -97,7 +97,7 @@ if __name__ == "__main__":
     page = create_page()
     gui = Gui(page)
 
-    # add partial
+    # add new partial object defined by page?
     partial_facts = gui.add_partial("")
 
     # run gui

@@ -10,10 +10,10 @@ import pandas as pd
 import taipy as tp
 from taipy.core.config import Config as tcc # TaipyCoreConfig
 
-from app.models.yfin import SPX, NDX
+from apps.models.yfin import SPX, NDX
 
-from app.tools import download_yfin, process_yfin
-from app.tools import DB_SQLITE_MANAGER
+from apps.tools import download_yfin, process_yfin
+from apps.tools import DB_SQLITE_MANAGER
 
 # Get the current date as a string
 current_date = datetime.now().strftime('%Y-%m-%d')

@@ -71,7 +71,7 @@ if __name__=="__main__":
             ]
         )
 
-    Config.export("config.toml")
+    Config.export("job-config.toml")
 
     # ------------------------------
     # run scenario
