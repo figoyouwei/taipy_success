@@ -8,7 +8,7 @@ from taipy.gui import Gui
 
 import pages.calculator as page_calculator
 import pages.chatbot as page_chatbot
-from pages.yfin import page_yfin, add_row
+from pages.yfin import page_yfin
 
 from turing import compute_points
 from models.calculator import Level, Point

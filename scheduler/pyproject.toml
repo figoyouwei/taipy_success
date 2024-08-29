@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "scheduler"
+version = "0.1.0"
+description = ""
+authors = ["Youwei Zheng <figoyouwei@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+taipy-enterprise = {url = "https://taipyap003.blob.core.windows.net/taipy/taipy-enterprise-3.1.tar.gz?sv=2023-08-03&spr=https&se=2124-08-06T16%3A46%3A34Z&sr=c&sp=rl&sig=SFjhH%2By5ozPhds0l5UH6hFMiQ9fNL8PPWtqqzAbxAlE%3D"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

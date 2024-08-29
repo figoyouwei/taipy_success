@@ -24,41 +24,79 @@ args_in = (
     current_date,
 )
 df = download_yfin(args_in)
-df_pcs = process_yfin(df)
+data_table = process_yfin(df)
+
 # data_df is used for your table; this is your bound variable
 # it is defined in the main.py so this variable is a global variable
 # you could or should define it in yfin.py
-data_df = df_pcs
 
 # ------------------------------
 # on_add
 # ------------------------------
 
-def add_row(state):
+def on_add(state):
     empty_row = pd.DataFrame(
-        [[None for _ in state.df_pcs.columns]], columns=state.df_pcs.columns
+        [[None for _ in state.data_table.columns]], columns=state.data_table.columns
     )
-    state.data_df = pd.concat([empty_row, state.df_pcs], axis=0, ignore_index=True)
+    state.data_table = pd.concat([empty_row, state.data_table], axis=0, ignore_index=True)
 
     notify(state, "S", f"Added one row")
 
-def edit_cell(state):
-    pass
+def on_edit(state, var_name, payload):
+    index = payload["index"]  # row index
+    col = payload["col"]  # column name
+    value = payload["value"]  # new value cast to the column type
+    user_value = payload["user_value"]  # new value as entered by the user
+
+    old_value = state.data_table.loc[index, col]
+    data_table = state.data_table.copy()
+    data_table.loc[index, col] = value
+    state.data_table = data_table
+    notify(
+        state=state,
+        notification_type="I",
+        message=f"Edited value from '{old_value}' to '{value}'. (index '{index}', column '{col}')",
+    )
+
+def on_delete(state, var_name, payload):
+    index = payload["index"]  # row index
+
+    state.data_table = state.data_table.drop(index=index)
+    notify(state, "E", f"Deleted row at index '{index}'")
 
 # ------------------------------
 # Create page
 # ------------------------------
+
+table_mode = True
+
+def toggle_mode(state):
+    print("Before toggle", state.table_mode)
+    if state.table_mode == False:
+        state.table_mode = True
+    else:
+        state.table_mode = False
+    print("After toggle", state.table_mode)
+        
+    notify(state, "I", f"Toggle table mode")
+
 
 with tgb.Page() as page_yfin:
     # Create title
     tgb.toggle(theme=True)
     tgb.text("# Table Data from yfinance ", mode="md", class_name="text-center pb1")
 
+    with tgb.layout("1", class_name="pb1 text-center"):
+        tgb.toggle(
+            value="{table_mode}",
+            on_change=toggle_mode
+            )
+
     # Create table
     tgb.table(
-        "{data_df}", 
-        editable=True, 
-        on_add=add_row,
-        on_edit=edit_cell,
-        on_delete=False
+        "{data_table}",
+        editable="{table_mode}",
+        on_add=on_add,
+        on_edit=on_edit,
+        on_delete=on_delete
     )
