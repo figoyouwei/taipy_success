@@ -23,6 +23,7 @@ conversation: List[List[str]] = [
     ["2", "Hi! I am GPT-4. How can I help you today?", "AI"],
 ]
 
+# only via css to change icon size
 users: List[List[str]] = [
     ["Human", Icon("/images/icon_hm.png", "Human.png")],
     ["AI", Icon("/images/icon_ai.png", "AI.png")],
@@ -146,7 +147,9 @@ def build_chat():
     with tgb.Page() as chat:
         # Doc for chat control: https://docs.taipy.io/en/develop/manuals/userman/gui/viselements/generic/chat/
         tgb.chat(
-            "{conversation}", users=users, on_action=send_message, sender_id="Human"
+            "{conversation}", 
+            users=users, on_action=send_message, sender_id="Human"
+
         )
     return chat
 

@@ -1,7 +1,7 @@
 """
 @author: Youwei Zheng
 @target: yfinance table page
-@update: 2024.08.26
+@update: 2024.08.29
 """
 
 from datetime import datetime
@@ -68,7 +68,7 @@ def on_delete(state, var_name, payload):
 # Create page
 # ------------------------------
 
-table_mode = True
+table_mode = False
 
 def toggle_mode(state):
     print("Before toggle", state.table_mode)
@@ -87,16 +87,24 @@ with tgb.Page() as page_yfin:
     tgb.text("# Table Data from yfinance ", mode="md", class_name="text-center pb1")
 
     with tgb.layout("1", class_name="pb1 text-center"):
-        tgb.toggle(
-            value="{table_mode}",
-            on_change=toggle_mode
+        tgb.text("Editing Mode: ", mode="md", class_name="text-center")
+        tgb.toggle(value="{table_mode}")
+
+        with tgb.part(render="{table_mode == False}"):
+            tgb.table(
+                "{data_table}",
+                editable=False,
+                on_add=on_add,
+                on_edit=on_edit,
+                on_delete=on_delete
             )
 
-    # Create table
-    tgb.table(
-        "{data_table}",
-        editable="{table_mode}",
-        on_add=on_add,
-        on_edit=on_edit,
-        on_delete=on_delete
-    )
+        with tgb.part(render="{table_mode}"):
+            tgb.table(
+                "{data_table}",
+                editable=True,
+                on_add=on_add,
+                on_edit=on_edit,
+                on_delete=on_delete
+            )
+            
