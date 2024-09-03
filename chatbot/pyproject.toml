@@ -9,6 +9,8 @@ readme = "README.md"
 python = "^3.12"
 taipy = "4.0.0.dev1"
 openai = "^1.43.0"
+langchain-community = "^0.2.15"
+dashscope = "^1.20.8"
 
 
 [tool.poetry.group.dev.dependencies]
