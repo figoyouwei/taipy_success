@@ -1,15 +1,18 @@
 [tool.poetry]
-name = "demo-chatbot-v4-0"
+name = "chatbot"
 version = "0.1.0"
 description = ""
-authors = ["Youwei Zheng <figoyouwei@gmail.com>"]
+authors = ["Youwei Zheng"]
 readme = "README.md"
-packages = [{include = "demo_chatbot_v4"}]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.12"
 taipy = "4.0.0.dev1"
-openai = "^1.42.0"
+openai = "^1.43.0"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.29.5"
 
 [build-system]
 requires = ["poetry-core"]

@@ -6,9 +6,9 @@
 
 from taipy.gui import Gui
 
-from apps.yfin.pages.calculator import page as page_calculator
-from apps.yfin.pages.chatbot import page as page_chatbot
-from apps.yfin.pages.yfin import page as page_yfin
+from apps.yfin.pages import page_calculator
+from apps.yfin.pages import page_chatbot
+from apps.yfin.pages import page_yfin
 
 # ------------------------------
 # Main app
