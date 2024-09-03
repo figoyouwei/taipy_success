@@ -1,34 +1,20 @@
 """
 @author: Youwei Zheng
 @target: Main app
-@update: 2024.08.27
+@update: 2024.09.03
 """
 
 from taipy.gui import Gui
 
-import pages.calculator as page_calculator
-import pages.chatbot as page_chatbot
-from pages.yfin import page_yfin
-
-from turing import compute_points
-from models.calculator import Level, Point
+from apps.yfin.pages.calculator import page as page_calculator
+from apps.yfin.pages.chatbot import page as page_chatbot
+from apps.yfin.pages.yfin import page as page_yfin
 
 # ------------------------------
 # Main app
 # ------------------------------
 
 if __name__ == "__main__":
-
-    # Create calcuator page
-    page_calculator = page_calculator.create_page()
-
-    # Create data instances of calculator model
-    levels = Level()
-    points = Point()
-    points = compute_points(levels)
-
-    # Create calcuator page
-    page_chatbot = page_chatbot.create_page()
 
     pages = {
         "/": "<center><|navbar|></center>",

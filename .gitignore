@@ -4,6 +4,7 @@
 # Env
 .env
 TaipyEnterprise.md
+taipy_success.code-workspace
 
 # Local settings
 .DS_Store
