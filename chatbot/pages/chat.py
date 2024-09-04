@@ -79,9 +79,7 @@ with tgb.Page() as page_chat:
 # Functions
 # ------------------------------
 
-from models.stateclass import ChatState
-
-def reset_chat(state: ChatState) -> None:
+def reset_chat(state) -> None:
     """
     Reset chat messages by clearing the conversation.
 
@@ -91,7 +89,7 @@ def reset_chat(state: ChatState) -> None:
 
     print("The count of messages", len(state.messages))
 
-    if len(state.messages) < 1:
+    if len(state.messages) < 3:
         notify(state, "I", "No messages to reset")
         return
 

@@ -18,6 +18,8 @@ def chat_tongyi(hm: str) -> str:
 
     # hm = "Do you know Luis Figo?"
     chatllm_client = create_tongyi_client()
+    
+    # TODO: just change to chain.invoke()
     message = chatllm_client.invoke(hm)
 
     return message.content
