@@ -9,8 +9,7 @@ from taipy.gui import Gui, notify, Icon
 
 from typing import List
 
-# The user interacts with the Python interpreter
-# only via css to change icon size
+# The user interacts with the Python interpreter only via css to change icon size
 users: List[List[str]] = [
     ["Human", Icon("/icons/icon_hm.png")],
     ["AI", Icon("/icons/icon_ai.png")],
