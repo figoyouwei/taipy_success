@@ -7,7 +7,7 @@
 import taipy.gui.builder as tgb
 from taipy.gui import notify, Icon
 
-from typing import List
+from typing import List, Optional
 
 # ------------------------------
 # Initialize state variables
@@ -26,8 +26,13 @@ empty_messages: List[List[str]] = [
 ]
 messages: List[List[str]] = empty_messages.copy()
 
-# * Initialize past_messages
-past_messages: List[List[List[str]]] = []
+# * Initialize selected conversation and history conversations which contain messages
+selected_conversation: Optional[List[List[str]]] = None
+history_conversations: List[List[List[str]]] = []
+
+# ------------------------------
+# Functions
+# ------------------------------
 
 from tools.chat import chat_tongyi
 
@@ -40,12 +45,13 @@ def evaluate(state, var_name: str, payload: dict):
         payload (dict): _description_
     """
     notify(state, "I", f"We are preparing your answer...")
+    print("New round of paired messages...")
 
     # Retrieve the callback parameters
     (_, _, message_hm, sender_id) = payload.get("args", [])
  
-    # Add the input content as a sent message
-    messages.append((f"{len(messages)}", message_hm, sender_id))
+    # Append human message
+    messages.append((f"{len(messages)+1}", message_hm, sender_id))
     # print(messages)
  
     # Default message used if evaluation fails
@@ -56,11 +62,12 @@ def evaluate(state, var_name: str, payload: dict):
     except Exception:
         pass
  
-    # Add the result as an incoming message
-    messages.append((f"{len(messages)}", result, "AI"))
+    # Append AI message
+    messages.append((f"{len(messages)+1}", result, "AI"))
 
     state.messages = messages
     print(state.messages)
+
 
 # ------------------------------
 # Create page
@@ -93,13 +100,14 @@ def reset_chat(state) -> None:
         notify(state, "I", "No messages to reset")
         return
 
-    state.past_messages += [(len(state.past_messages), state.messages)]
+    # NOTE: save messages to history_conversations
+    state.history_conversations += [(len(state.history_conversations), state.messages)]
+    print("Current messages were saved into history_conversations with an index")
+    print(state.history_conversations)
 
-    print("empty_messages:", empty_messages)
+    # NOTE: reset messages by empty_messages
     state.messages = empty_messages.copy()
 
-    # state.context = initial_context
+    # NOTE: reset chat.content
     state.partial_chat.update_content(state, page_chat)
-
     print("Chat was reset...")
-    

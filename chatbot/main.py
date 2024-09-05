@@ -8,7 +8,8 @@ from dotenv import find_dotenv, load_dotenv
 load_dotenv(find_dotenv())
 
 from taipy.gui import Gui
-from pages import page_sidebar, page_chat
+from pages.sidebar import page_sidebar
+from pages.chat import page_chat
 
 # ------------------------------
 # Main app
