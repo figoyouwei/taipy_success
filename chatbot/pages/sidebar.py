@@ -6,48 +6,24 @@
 
 import taipy.gui.builder as tgb
 
+# ------------------------------
+# Import functions
+# ------------------------------
+
 from pages.chat import reset_chat
-from pages.chat import page_chat
+from pages.chat import select_session
+from pages.chat import selector_adapter
 
 # ------------------------------
-# Functions
+# Import state variables
 # ------------------------------
 
-def selector_adapter(item: list):
-    """
-    Converts element of history_conversations to (id and displayed string)?
-
-    Args:
-        item: element of history_conversations
-
-    Returns:
-        id and displayed string
-    """
-    print("item", item, type(item))
-    conversation = item[1]
-    last_message_info = conversation[len(conversation) - 1]
-    last_message = last_message_info[1]
-    return (str(item[0]), last_message[:50] + "...")
-
-
-def select_conv(state, var_name: str, value) -> None:
-    """
-    Display the messages of selected conversation from history_conversations in tgb.chat()
-
-    Args:
-        state: The current state of the app.
-        var_name: "selected_conv"
-        value: [[id, conversation]]
-    """
-    state.selected_conversation = state.selected_conv[1]
-    state.partial_chat.update_content(state, page_chat)
+from pages.chat import selected_session
+from pages.chat import chat_sessions
 
 # ------------------------------
 # Create page
 # ------------------------------
-
-from pages.chat import selected_conversation
-from pages.chat import history_conversations
 
 with tgb.Page() as page_sidebar:
     # NOTE: fixed width 300px
@@ -58,16 +34,17 @@ with tgb.Page() as page_sidebar:
             tgb.text("## Chatbot Demo", class_name="text-center", mode="md")
             # sidebar button
             tgb.button(
-                "New Conversation",
+                "New Session",
                 on_action=reset_chat,
                 class_name="fullwidth plain",
             )
 
             tgb.text("### Previous activities", mode="md", class_name="h5 mt2 mb-half")
             tgb.selector(
-                "{selected_conversation}",
-                lov="{history_conversations}",
-                on_change=select_conv,
+                "{selected_session}",
+                lov="{chat_sessions}",
+                on_change=select_session,
+                # NOTE: displayed text of selector item
                 adapter=selector_adapter,
                 # NOTE: css identifier
                 id="past_prompts_list",
