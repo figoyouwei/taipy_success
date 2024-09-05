@@ -36,7 +36,7 @@ chat_sessions: List[List[List[str]]] = []
 # Functions
 # ------------------------------
 
-from tools.chat import chat_tongyi
+from tools.chat import chat_tongyi_without_memory
 
 def evaluate(state, var_name: str, payload: dict):
     """_summary_
@@ -60,7 +60,7 @@ def evaluate(state, var_name: str, payload: dict):
     result = "Invalid expression"
     try:
         # Evaluate the expression and store the result
-        result = chat_tongyi(message_hm)
+        result = chat_tongyi_without_memory(message_hm)
     except Exception:
         pass
  

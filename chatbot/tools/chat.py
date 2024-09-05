@@ -6,7 +6,7 @@
 
 from utils import create_tongyi_client
 
-def chat_tongyi(hm: str) -> str:
+def chat_tongyi_without_memory(hm: str) -> str:
     """_summary_
 
     Args:

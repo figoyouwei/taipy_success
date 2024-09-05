@@ -7,15 +7,18 @@
 import taipy.gui.builder as tgb
 from taipy.gui import Gui
 
-class User:
-    def __init__(self, id, name, birth_year):
-        self.id, self.name, self.birth_year = (id, name, birth_year)
+from pydantic import BaseModel
+
+class User(BaseModel):
+    id: int
+    name: str
+    birth_year: int
 
 users = [
-    User(4, "Figo", 1987),
-    User(3, "John", 1979),
-    User(2, "Lisa", 1968),
-    User(8, "Mary", 1974)
+    User(id=1, name="Figo", birth_year=1987),
+    User(id=2, name="John", birth_year=1979),
+    User(id=3, name="Lisa", birth_year=1968),
+    User(id=4, name="Mary", birth_year=1974),
     ]
 
 selected_user = users[2]
@@ -23,8 +26,7 @@ selected_user = users[2]
 
 def selector_adapter(item):
     print("Entering selector_adapter...")
-    print("Guten Morgen, {}, {}".format(item.id, item.name))
-    
+    # print("Guten Morgen, {}, {}".format(item.id, item.name))    
     return (item.id, item.name + "...")
 
 
@@ -35,7 +37,7 @@ def select_user(state, var_name: str, value) -> None:
 with tgb.Page() as page:
     with tgb.layout("1"):
         tgb.selector(
-            "{selected_user}",
+            value="{selected_user}",
             lov="{users}",
             # NOTE: on_change = on_click
             on_change=select_user,
