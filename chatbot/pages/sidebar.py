@@ -1,16 +1,17 @@
 """
 @author: Youwei Zheng
 @target: sidebar page
-@update: 2024.09.05
+@update: 2024.09.06
 """
 
 import taipy.gui.builder as tgb
+from models.chat import ChatSession
 
 # ------------------------------
 # Import functions
 # ------------------------------
 
-from pages.chat import reset_chat
+from pages.chat import reset_session
 from pages.chat import select_session
 from pages.chat import selector_adapter
 
@@ -19,7 +20,7 @@ from pages.chat import selector_adapter
 # ------------------------------
 
 from pages.chat import selected_session
-from pages.chat import chat_sessions
+from pages.chat import sessions
 
 # ------------------------------
 # Create page
@@ -32,19 +33,22 @@ with tgb.Page() as page_sidebar:
         with tgb.part(class_name="sidebar"):
             # sidebar title
             tgb.text("## Chatbot Demo", class_name="text-center", mode="md")
-            # sidebar button
+
+            # NOTE: reset part
             tgb.button(
                 "New Session",
-                on_action=reset_chat,
+                on_action=reset_session,
                 class_name="fullwidth plain",
             )
 
+            # NOTE: selector part
             tgb.text("### Previous activities", mode="md", class_name="h5 mt2 mb-half")
             tgb.selector(
                 "{selected_session}",
-                lov="{chat_sessions}",
+                lov="{sessions}",
                 on_change=select_session,
                 # NOTE: displayed text of selector item
+                type=ChatSession,
                 adapter=selector_adapter,
                 # NOTE: css identifier
                 id="past_prompts_list",

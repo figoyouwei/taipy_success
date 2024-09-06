@@ -1,13 +1,15 @@
 """
 @author: Youwei Zheng
 @target: chat page partial
-@update: 2024.09.05
+@update: 2024.09.06
 """
 
 import taipy.gui.builder as tgb
 from taipy.gui import notify, Icon
 
-from typing import List, Optional
+from typing import List, Optional, Any
+
+from models.chat import ChatMessage, ChatSession, SessionCollection
 
 # ------------------------------
 # Initialize state variables
@@ -19,18 +21,20 @@ users: List[List[str]] = [
     ["AI", Icon("/icons/icon_ai.png")],
 ]
 
-# * Initialize empty_messages
-empty_messages: List[List[str]] = [
-    ["1", "Who are you?", "Human"],
-    ["2", "Hi! I am GPT-4. How can I help you today?", "AI"],    
+# * Initialize empty messages
+empty_messages = [
+    ChatMessage(id=1, content="Who are you?", sender="Human"),
+    ChatMessage(id=2, content="Hi! I am GPT-4. How can I help you today?", sender="AI"),
 ]
 
-# * Initialize current messages
-messages: List[List[str]] = empty_messages.copy()
+# * Initialize chat session as current session
+chat_session = ChatSession(messages=empty_messages)
+messages = chat_session.to_list()
 
 # * Initialize selected conversation and history conversations which contain messages
-selected_session: Optional[List[List[str]]] = None
-chat_sessions: List[List[List[str]]] = []
+selected_session = ChatSession(messages=[])
+session_collection = SessionCollection()
+sessions = session_collection.sessions
 
 # ------------------------------
 # Functions
@@ -38,24 +42,17 @@ chat_sessions: List[List[List[str]]] = []
 
 from tools.chat import chat_tongyi_without_memory
 
+# Example usage in evaluate function
 def evaluate(state, var_name: str, payload: dict):
-    """_summary_
-
-    Args:
-        state (_type_): _description_
-        var_name (str): not sure of its function
-        payload (dict): _description_
-    """
     notify(state, "I", f"We are preparing your answer...")
-    print("New round of paired messages...")
+    print("We are preparing your answer...")
 
     # Retrieve the callback parameters
     (_, _, message_hm, sender_id) = payload.get("args", [])
- 
+
     # Append human message
-    state.messages.append((f"{len(state.messages)+1}", message_hm, sender_id))
-    # print(messages)
- 
+    state.chat_session.add_message(content=message_hm, sender=sender_id)
+
     # Default message used if evaluation fails
     result = "Invalid expression"
     try:
@@ -63,10 +60,10 @@ def evaluate(state, var_name: str, payload: dict):
         result = chat_tongyi_without_memory(message_hm)
     except Exception:
         pass
- 
+
     # Append AI message
-    state.messages.append((f"{len(state.messages)+1}", result, "AI"))
-    # print(state.messages)
+    state.chat_session.add_message(content=result, sender="AI")
+    state.messages = state.chat_session.to_list()
 
     # NOTE: update chat.content
     state.partial_chat.update_content(state, page_chat)
@@ -78,7 +75,7 @@ def evaluate(state, var_name: str, payload: dict):
 with tgb.Page() as page_chat:
     # Doc for chat control: https://docs.taipy.io/en/develop/manuals/userman/gui/viselements/generic/chat/
     tgb.chat(
-        "{messages}",
+        messages="{messages}",
         users=users, 
         on_action=evaluate, 
         sender_id="Human"
@@ -88,34 +85,54 @@ with tgb.Page() as page_chat:
 # Function: reset chat messages
 # ------------------------------
 
-def reset_chat(state) -> None:
+def reset_session(state) -> None:
     """
-    Reset chat messages by clearing the conversation.
+    Reset chat messages by clearing the conversation and saving the current session to history.
 
     Args:
-        - state: The current state of the app.
+        - state: The current state of the app, including chat_sessions and the current session.
     """
 
     print("The user is resetting chat...")
 
-    # ! Why selector adapter is coming here?
+    # Initialize session_collection if it doesn't exist
+    if state.session_collection is None:
+        state.session_collection = SessionCollection()
 
-    # NOTE: save messages to history_conversations
-    state.chat_sessions += [(len(state.chat_sessions), state.messages)]
-    print("Current messages were saved into history_conversations with an index")
-    print(state.chat_sessions)
-    
-    if len(state.messages) < 3:
+    # Check if there are any messages to save
+    if len(state.chat_session.messages) <= 2:
         notify(state, "I", "No messages to reset")
         return
 
-    # NOTE: reset messages by empty_messages
-    state.messages = empty_messages.copy()
+    # Check if the current session already exists in the session_collection
+    existing_session = next((s for s in state.session_collection.sessions if s.session_id == state.chat_session.session_id), None)
 
-    # NOTE: reset chat.content
+    if existing_session:
+        # Update the existing session's messages using the new method
+        existing_session.update_messages(state.chat_session.messages)
+    else:
+        # Add the current session to the collection
+        state.session_collection.add_session(state.chat_session)
+        print(f"Current session with id {state.chat_session.session_id} was added to the session collection.")
+
+    print(state.session_collection.sessions)
+
+    # Calculate the new session number
+    new_session_no = len(state.session_collection.sessions) + 1
+
+    # Create a new ChatSession with the incremented session_no (starting from 1)
+    state.chat_session = ChatSession(session_no=new_session_no, messages=empty_messages)
+    print(f"A new session with session_no {new_session_no} has been created.")
+
+    # NOTE: update chat
+    state.messages = state.chat_session.to_list()
     state.partial_chat.update_content(state, page_chat)
     print("Chat was reset...")
-    
+
+    # NOTE: update selector list
+    state.sessions = state.session_collection.sessions
+    print("Selector list was updated...")
+        
 # ------------------------------
 # Function: select session
 # ------------------------------
@@ -133,32 +150,26 @@ def select_session(state, var_name: str, value) -> None:
     print("The user selected a session...")
     print(state.selected_session)
 
-    # NOTE: selected session to messages
-    state.messages = state.selected_session[1]
+    # # NOTE: selected session to messages
+    state.chat_session = state.selected_session
+    state.messages = state.chat_session.to_list()
+
     state.partial_chat.update_content(state, page_chat)
-    print("messages updated...")
+    print("chat session updated...")
 
 # ------------------------------
 # Function: selector adapter
 # ------------------------------
 
-def selector_adapter(item: list):
-    """
-    Converts element of history_conversations to (id and displayed string)?
+def get_message_title_by_id(messages: List[ChatMessage], message_id: int) -> str:
+    # Find the message with the given id
+    for message in messages:
+        if message.id == message_id:
+            # Return the last 10 characters of the content
+            return message.content[:20]
+    return "Message not found"
 
-    Args:
-        item: element of history_conversations
-
-    Returns:
-        id and displayed string
-    """
-    print("Entering selector adapter")
-
-    # TODO: It has to reference to that id in the history_conversations to not repeat sessions
-    # NOTE: The function that transforms an element of lov into a tuple(id:str, label:str|Icon).
-    print("item", item, type(item))
-
-    conversation = item[1]
-    last_message_info = conversation[len(conversation) - 1]
-    last_message = last_message_info[1]
-    return (str(item[0]), last_message[:50] + "...")
+def selector_adapter(sess: ChatSession):
+    # NOTE: The function that transforms a data model into a tuple(id:str, label:str).
+    message_title = get_message_title_by_id(sess.messages, 3)
+    return (sess.session_no, message_title)
