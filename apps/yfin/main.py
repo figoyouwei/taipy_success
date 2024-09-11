@@ -10,30 +10,22 @@ import taipy.gui.builder as tgb
 from apps.yfin.pages import page_calculator
 from apps.yfin.pages import page_chatbot
 from apps.yfin.pages import page_yfin
+from apps.yfin.pages import page_home
 
 # ------------------------------
 # Main app
 # ------------------------------
 
 if __name__ == "__main__":
-
-    # navbar_lov = [
-    #     ("Calculator", "Calculator Page"),
-    #     ("Chatbot", "Chatbot Page"),
-    #     ("https://taipy.io/", "Taipy Home")
-    # ]
-
-    # with tgb.Page() as pages:
-    #     tgb.navbar(
-    #         lov="{navbar_lov}"
-    #         )
     
     pages = {
-        "/": "<center><|navbar|></center>",
+        "/": page_home,
         "yfinance": page_yfin,
         "calculator": page_calculator,
         "chatbot": page_chatbot,
     }
+
+    gui = Gui(pages=pages, css_file="./main.css")
 
     # Run page
     Gui(pages=pages).run(

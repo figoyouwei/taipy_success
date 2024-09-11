@@ -1,7 +1,7 @@
 """
 @author: Youwei Zheng
 @target: Chat Message Model
-@update: 2024.09.06
+@update: 2024.09.11
 """
 
 import uuid

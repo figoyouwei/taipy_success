@@ -8,9 +8,9 @@
 }
 /* receiver name */
 .taipy-chat-sent .MuiStack-root .MuiStack-root .MuiBox-root {
- text-align: end;
- margin-right: -36px;
- padding-right: 0;
+    text-align: end;
+    margin-right: -36px;
+    padding-right: 0;
 }
 
 /* received avatar */
