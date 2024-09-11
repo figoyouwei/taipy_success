@@ -823,13 +823,13 @@ dotenv = ["python-dotenv"]
 
 [[package]]
 name = "flask-cors"
-version = "4.0.1"
+version = "5.0.0"
 description = "A Flask extension adding a decorator for CORS support"
 optional = false
 python-versions = "*"
 files = [
-    {file = "Flask_Cors-4.0.1-py2.py3-none-any.whl", hash = "sha256:f2a704e4458665580c074b714c4627dd5a306b333deb9074d0b1794dfa2fb677"},
-    {file = "flask_cors-4.0.1.tar.gz", hash = "sha256:eeb69b342142fdbf4766ad99357a7f3876a2ceb77689dc10ff912aac06c389e4"},
+    {file = "Flask_Cors-5.0.0-py2.py3-none-any.whl", hash = "sha256:b9e307d082a9261c100d8fb0ba909eec6a228ed1b60a8315fd85f783d61910bc"},
+    {file = "flask_cors-5.0.0.tar.gz", hash = "sha256:5aadb4b950c4e93745034594d9f3ea6591f734bb3662e16e255ffbf5e89c88ef"},
 ]
 
 [package.dependencies]
@@ -3057,20 +3057,20 @@ tests = ["cython", "littleutils", "pygments", "pytest", "typeguard"]
 
 [[package]]
 name = "taipy"
-version = "4.0.0.dev1"
+version = "4.0.0.dev2"
 description = "A 360° open-source platform from Python pilots to production-ready web apps."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "taipy-4.0.0.dev1-py3-none-any.whl", hash = "sha256:684f6c703731a4c11181caf464c07f90dc1d4fcfbdd316e62af4b5390cdc4dcf"},
-    {file = "taipy-4.0.0.dev1.tar.gz", hash = "sha256:b166701731f6a06d1d8581ba77c08af12538496dac4455379dc7b6a2ca5b2eec"},
+    {file = "taipy-4.0.0.dev2-py3-none-any.whl", hash = "sha256:c56903e81d0234706f98b394bb4bf4c3f1eb1829c0854c5d2a016d1869a4a132"},
+    {file = "taipy-4.0.0.dev2.tar.gz", hash = "sha256:04165437ead6f66e04c831f1f1b0f559ad79b968e9c607fe932db6a627809a6e"},
 ]
 
 [package.dependencies]
 cookiecutter = ">=2.1.1,<=2.6.0"
-taipy-gui = "4.0.0.dev1"
-taipy-rest = "4.0.0.dev1"
-taipy-templates = "4.0.0.dev1"
+taipy-gui = "4.0.0.dev2"
+taipy-rest = "4.0.0.dev2"
+taipy-templates = "4.0.0.dev2"
 
 [package.extras]
 arrow = ["pyarrow (>=14.0.2,<15.0)"]
@@ -3081,12 +3081,12 @@ rdp = ["rdp (>=0.8)"]
 
 [[package]]
 name = "taipy-config"
-version = "4.0.0.dev1"
+version = "4.0.0.dev2"
 description = "A Taipy package dedicated to easily configure a Taipy application."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "taipy-config-4.0.0.dev1.tar.gz", hash = "sha256:401f53f75d718755e986f06ae089ebe09349e336de3832a0aa662ee74724e364"},
+    {file = "taipy-config-4.0.0.dev2.tar.gz", hash = "sha256:d718d1b59abe99afdec37ebb30d8f06c90c243c8d19f448df34da1bacf21c138"},
 ]
 
 [package.dependencies]
@@ -3098,12 +3098,12 @@ testing = ["pytest (>=3.8)"]
 
 [[package]]
 name = "taipy-core"
-version = "4.0.0.dev1"
+version = "4.0.0.dev2"
 description = "A Python library to build powerful and customized data-driven back-end applications."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "taipy-core-4.0.0.dev1.tar.gz", hash = "sha256:189de35653e68c85794fb4cf7788228b2ce5a3324758811cba79ef36d7308860"},
+    {file = "taipy-core-4.0.0.dev2.tar.gz", hash = "sha256:22fccc5d78837276b11fd958a4e02dd71fee801c77986a4a21181da006a8a2b1"},
 ]
 
 [package.dependencies]
@@ -3114,7 +3114,7 @@ pandas = ">=1.3.5,<=2.2.2"
 pyarrow = ">=14.0.2,<=16.1.0"
 pymongo = {version = ">=4.2.0,<=4.7.2", extras = ["srv"]}
 sqlalchemy = ">=2.0.16,<=2.0.30"
-taipy-config = "4.0.0.dev1"
+taipy-config = "4.0.0.dev2"
 toml = ">=0.10,<=0.10.2"
 
 [package.extras]
@@ -3128,18 +3128,18 @@ s3 = ["boto3 (==1.29.1)"]
 
 [[package]]
 name = "taipy-gui"
-version = "4.0.0.dev1"
+version = "4.0.0.dev2"
 description = "Low-code library to create graphical user interfaces on the Web for your Python applications."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "taipy-gui-4.0.0.dev1.tar.gz", hash = "sha256:960709c0d446a8a03478fd8b0d589ad9f9b4e19f314341ebef9112b5d45e7181"},
+    {file = "taipy-gui-4.0.0.dev2.tar.gz", hash = "sha256:8d7ced62f08131b7dd8c9ae525be79cc7a41cdfd150e88e98e25f3c04c59d913"},
 ]
 
 [package.dependencies]
 charset-normalizer = "3.3.2"
 flask = ">=3.0.0,<=3.0.3"
-flask-cors = ">=4.0.0,<=4.0.1"
+flask-cors = ">=5.0.0,<5.1"
 flask-socketio = "5.3.6"
 gevent = ">=23.7.0,<=24.2.1"
 gevent-websocket = "0.10.1"
@@ -3150,7 +3150,7 @@ pandas = ">=1.3.5,<=2.2.2"
 python-dotenv = ">=1.0.0,<=1.0.1"
 pytz = ">=2021.3,<=2024.1"
 simple-websocket = ">=0.10.1,<=1.0.0"
-taipy-config = "4.0.0.dev1"
+taipy-config = "4.0.0.dev2"
 twisted = ">=24.7.0,<24.8.0"
 tzlocal = ">=3.0,<=5.2"
 watchdog = ">=4.0.0,<=4.0.1"
@@ -3162,12 +3162,12 @@ ngrok = ["pyngrok (>=5.1,<6.0)"]
 
 [[package]]
 name = "taipy-rest"
-version = "4.0.0.dev1"
+version = "4.0.0.dev2"
 description = "Library to expose taipy-core REST APIs."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "taipy-rest-4.0.0.dev1.tar.gz", hash = "sha256:cc1f87aebc30e4c2464456f1d5ffd8e7d86e90a4fcbc04a8b18a490af6689974"},
+    {file = "taipy-rest-4.0.0.dev2.tar.gz", hash = "sha256:c9f1b22ec5a3e7f44fbf4a4a2bee4e3cd17f89a530db915a316761fea3fd3cc7"},
 ]
 
 [package.dependencies]
@@ -3177,16 +3177,16 @@ flask = ">=3.0.0,<=3.0.3"
 flask-restful = ">=0.3.9,<=0.3.10"
 marshmallow = ">=3.20.1,<=3.21.2"
 passlib = "1.7.4"
-taipy-core = "4.0.0.dev1"
+taipy-core = "4.0.0.dev2"
 
 [[package]]
 name = "taipy-templates"
-version = "4.0.0.dev1"
+version = "4.0.0.dev2"
 description = "An open-source package holding Taipy application templates."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "taipy-templates-4.0.0.dev1.tar.gz", hash = "sha256:a5a49f91747edc9b65d7248c379c1c0265394285c1516bb8929d6db0ef2fb138"},
+    {file = "taipy-templates-4.0.0.dev2.tar.gz", hash = "sha256:0ee7664318de4f89ba9abf6d309532323a12df0247d6ffe11bcf45637fcffbc9"},
 ]
 
 [[package]]
@@ -3677,4 +3677,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "d6d7d412e826c5f65834f76e57053eb19129fffdb70bf464f95eaf41c6e519e1"
+content-hash = "e3e53c12f86048db46c9b3e28eadc97ab17fe400553d18e792530d3dcbe884f1"

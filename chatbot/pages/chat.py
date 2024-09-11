@@ -18,13 +18,13 @@ from models.chat import ChatMessage, ChatSession, SessionCollection
 # NOTE: The user interacts with the Python interpreter only via css to change icon size
 users: List[List[str]] = [
     ["Human", Icon("/icons/icon_hm.png")],
-    ["AI", Icon("/icons/icon_ai.png")],
+    ["Robot", Icon("/icons/icon_ai.png")],
 ]
 
 # * Initialize empty messages
 empty_messages = [
     ChatMessage(id=1, content="Who are you?", sender="Human"),
-    ChatMessage(id=2, content="Hi! I am GPT-4. How can I help you today?", sender="AI"),
+    ChatMessage(id=2, content="Hi! I am GPT-4. How can I help you today?", sender="Robot"),
 ]
 
 # * Initialize chat session as current session
@@ -51,7 +51,7 @@ def evaluate(state, var_name: str, payload: dict):
     (_, _, message_hm, sender_id) = payload.get("args", [])
 
     # Append human message
-    state.chat_session.add_message(content=message_hm, sender=sender_id)
+    state.chat_session.add_message(content=message_hm, sender="Robot")
 
     # Default message used if evaluation fails
     result = "Invalid expression"
@@ -62,7 +62,7 @@ def evaluate(state, var_name: str, payload: dict):
         pass
 
     # Append AI message
-    state.chat_session.add_message(content=result, sender="AI")
+    state.chat_session.add_message(content=result, sender="Robot")
     state.messages = state.chat_session.to_list()
 
     # NOTE: update chat.content

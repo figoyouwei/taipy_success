@@ -1,0 +1,39 @@
+/* receiver order */
+.taipy-chat-sent > .MuiGrid2-root > .MuiStack-root {
+    flex-direction: row-reverse;
+}
+/* receiver avatar */
+.taipy-chat-sent > .MuiGrid2-root > .MuiStack-root > .MuiBox-root {
+    padding-top: 1em;
+}
+/* receiver name */
+.taipy-chat-sent .MuiStack-root .MuiStack-root .MuiBox-root {
+ text-align: end;
+ margin-right: -36px;
+ padding-right: 0;
+}
+
+/* received avatar */
+.taipy-chat-received > .MuiGrid2-root > .MuiStack-root > .MuiBox-root {
+    padding-top: 1em;
+}
+
+/* received user name */
+.taipy-chat-received .MuiStack-root .MuiStack-root .MuiBox-root {
+    margin-left: -44px;
+    padding-left: 0;
+}
+
+/* chat main frame */
+.css-taa4w6 {
+    color: rgb(255, 255, 255);
+    box-shadow: var(--Paper-shadow);
+    background-image: none;
+    padding-top: 1.0em;
+    padding-bottom: 1.0em;
+    padding-left: 1.0em;
+    padding-right: 1.0em;
+    background-color: rgb(42, 57, 77);
+    transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 8px;
+}

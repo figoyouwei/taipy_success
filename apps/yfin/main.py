@@ -5,6 +5,7 @@
 """
 
 from taipy.gui import Gui
+import taipy.gui.builder as tgb
 
 from apps.yfin.pages import page_calculator
 from apps.yfin.pages import page_chatbot
@@ -16,6 +17,17 @@ from apps.yfin.pages import page_yfin
 
 if __name__ == "__main__":
 
+    # navbar_lov = [
+    #     ("Calculator", "Calculator Page"),
+    #     ("Chatbot", "Chatbot Page"),
+    #     ("https://taipy.io/", "Taipy Home")
+    # ]
+
+    # with tgb.Page() as pages:
+    #     tgb.navbar(
+    #         lov="{navbar_lov}"
+    #         )
+    
     pages = {
         "/": "<center><|navbar|></center>",
         "yfinance": page_yfin,

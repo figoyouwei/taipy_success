@@ -26,9 +26,10 @@ from pages.chat import sessions
 # Create page
 # ------------------------------
 
-with tgb.Page() as page_sidebar:
-    # NOTE: fixed width 300px
-    with tgb.layout("300px 1", columns__mobile="1"):
+with tgb.Page() as page_home:
+    # NOTE: fixed width 300px or 1 3
+    # with tgb.layout(columns="300px 1", columns__mobile="1"):
+    with tgb.layout(columns="1 3", columns__mobile="1"):
         # NOTE: sidebar class
         with tgb.part(class_name="sidebar"):
             # sidebar title
@@ -44,7 +45,7 @@ with tgb.Page() as page_sidebar:
             # NOTE: selector part
             tgb.text("### Previous activities", mode="md", class_name="h5 mt2 mb-half")
             tgb.selector(
-                "{selected_session}",
+                value="{selected_session}",
                 lov="{sessions}",
                 on_change=select_session,
                 # NOTE: displayed text of selector item

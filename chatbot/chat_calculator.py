@@ -1,7 +1,7 @@
 """
 @author: Youwei Zheng
-@target: Issue #10
-@update: 2024.09.03
+@target: Issue #13 solved
+@update: 2024.09.11
 """
 
 import taipy.gui.builder as tgb
@@ -58,4 +58,9 @@ with tgb.Page() as page:
 
 if __name__ == "__main__":
     print("Starting calculator...")
-    Gui(page).run()
+    gui = Gui(page=page, css_file="./main.css")
+    
+    gui.run(
+        dark_mode=True,
+        title="Calculator v4.0.0dev2"
+    )
