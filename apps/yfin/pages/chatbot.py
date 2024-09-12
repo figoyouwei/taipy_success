@@ -9,7 +9,7 @@ import taipy.gui.builder as tgb
 with tgb.Page() as page:
     # title line
     tgb.toggle(theme=True)
-    tgb.text("# Chatbot with LangChain", mode="md", class_name="text-center pb1")
+    tgb.text("### Chatbot with LangChain", mode="md", class_name="text-center pb1")
 
     # footer
     tgb.text("Developed by CR7", mode="md", class_name="text-center pb1")               

@@ -84,7 +84,7 @@ def toggle_mode(state):
 with tgb.Page() as page:
     # Create title
     tgb.toggle(theme=True)
-    tgb.text("# Table Data from yfinance ", mode="md", class_name="text-center pb1")
+    tgb.text("### Table Data from yfinance ", mode="md", class_name="text-center pb1")
 
     with tgb.layout("1", class_name="pb1 text-center"):
         tgb.toggle(value="{table_mode}", label="Editing mode")

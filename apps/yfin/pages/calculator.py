@@ -43,7 +43,7 @@ points = compute_points(levels)
 with tgb.Page() as page:
     # title line
     tgb.toggle(theme=True)
-    tgb.text("# Taipy Success", mode="md", class_name="text-center pb1")
+    tgb.text("### Taipy Calculator", mode="md", class_name="text-center pb1")
 
     # reset button
     with tgb.layout("1", class_name="pb1"):                

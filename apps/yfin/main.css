@@ -1,4 +1,3 @@
-.center-navbar {
-    display: flex;
-    justify-content: center;
+.navbar {
+    margin: auto;
 }
