@@ -2,5 +2,7 @@
 - zhengyouwei
 - Su62657272
 
-# Flask-Taipy
-Not working yet.
+# Running multiple Taipy apps
+```
+python manage.py runserver --noreload
+```
