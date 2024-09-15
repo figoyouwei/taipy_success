@@ -9,7 +9,7 @@ from questions.models import Question
 from questions.models import Choice
 
 # Fetch the questions and choices
-Fragen = Question.objects.all()[0:2]  
+Fragen = Question.objects.all()[2:4]  
 Choices = Fragen
 
 selected_choice = Choice()
@@ -31,7 +31,7 @@ import taipy.gui.builder as tgb
 with tgb.Page() as page:
     # Title and Theme Toggle
     tgb.toggle(theme=True)
-    tgb.text("### Taipy Questionnaire", mode="md", class_name="text-center pb1")
+    tgb.text("### SaaS Questionnaire", mode="md", class_name="text-center pb1")
 
     # Loop through all questions and their corresponding choices
     with tgb.layout(columns="1 2 1", class_name="text-center"):
