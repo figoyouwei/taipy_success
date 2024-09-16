@@ -24,14 +24,17 @@ users = [
 selected_user = users[2]
 
 
-def selector_adapter(item):
-    print("Entering selector_adapter...")
+def selector_adapter(u: User):
+    # print("Entering selector_adapter...")
     # print("Guten Morgen, {}, {}".format(item.id, item.name))    
-    return (item.id, item.name + "...")
+    return (u.id, u.name + "...")
 
 
 def select_user(state, var_name: str, value) -> None:
     print("The user selected: {}".format(state.selected_user.name))
+
+def get_selected(u: User):
+    print(User.id)
 
 
 with tgb.Page() as page:
@@ -39,11 +42,11 @@ with tgb.Page() as page:
         tgb.selector(
             value="{selected_user}",
             lov="{users}",
-            # NOTE: on_change = on_click
-            on_change=select_user,
             # NOTE: type = data model
             type=User,
             adapter=selector_adapter,
+            # NOTE: on_change = on_click
+            on_change=select_user
         )
 
 if __name__ == "__main__":
