@@ -7,9 +7,10 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-taipy = "^3.1.1"
 django = "^5.1.1"
 flask = "3.0.2"
+taipy = "4.0.0.dev2"
+polars = "^1.7.1"
 
 
 [tool.poetry.group.dev.dependencies]
