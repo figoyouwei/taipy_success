@@ -2,14 +2,13 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import User  # Assuming you are using Django's default User model
 
-# NOTE: add Answer model
 class Answer(models.Model):
     question = models.ForeignKey('Question', on_delete=models.CASCADE)  # The question that was answered
     selected_choice = models.ForeignKey('Choice', on_delete=models.CASCADE)  # The selected choice
     created_at = models.DateTimeField(auto_now_add=True)  # Timestamp of the answer
 
     def __str__(self):
-        return f"selected {self.selected_choice.symbol} for {self.question.text}"
+        return f"Selected {self.selected_choice.symbol} for {self.question.text}"
 
 
 class Question(models.Model):
@@ -30,21 +29,20 @@ class Question(models.Model):
         super(Question, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.text
+        return f"Question: {self.text}"
 
     # NOTE: via ForeignKey -> related_name
     def get_choices(self) -> list:
         """Return all related Choice instances as a list."""
         return list(self.choices.all())  # Convert QuerySet to list
 
-    def get_selected_choice(self, symbol_no: str):
-        """Store or update the selected choice based on symbol number."""
+    def get_choice_by_symbol(self, symbol: str):
+        """Return single choice by symbol."""
         try:
-            selected_choice = self.choices.get(symbol_no=symbol_no)
+            selected_choice = self.choices.get(symbol=symbol)
             return selected_choice
         except Choice.DoesNotExist:
             return None
-
 
 class Choice(models.Model):
     SYMBOL_CHOICES = [
@@ -57,7 +55,6 @@ class Choice(models.Model):
         
     question = models.ForeignKey(Question, related_name='choices', on_delete=models.CASCADE)  # Link to the Question
     symbol = models.CharField(max_length=1, choices=SYMBOL_CHOICES, default='A')  # Symbol for the choice (A, B, C, D, E)
-    symbol_no = models.IntegerField(default=1)  # Symbol number
     text = models.CharField(max_length=255, default='Please ask a question')  # The choice text
     score = models.IntegerField(default=0)  # Score associated with the choice
 

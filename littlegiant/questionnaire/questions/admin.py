@@ -3,7 +3,7 @@ from .models import Question, Choice
 
 class ChoiceInline(admin.TabularInline):
     model = Choice  # Show choices inline when creating/editing questions
-    # extra = 3  # Number of extra blank choices to show
+    extra = 0  # Number of extra blank choices to show
 
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ('text', 'category', 'created_at', 'identifier')

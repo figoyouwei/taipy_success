@@ -36,7 +36,7 @@ class AppsConfig(AppConfig):
         # Run the first Taipy app in a separate thread on port 5000
         taipy_thread_one = threading.Thread(
             target=gui_one.run, 
-            kwargs={'port': 5000}, 
+            kwargs={'port': 5001}, 
             daemon=True
         )
         taipy_thread_one.start()
@@ -47,7 +47,7 @@ class AppsConfig(AppConfig):
         # Run the second Taipy app in a separate thread on port 5001
         taipy_thread_two = threading.Thread(
             target=gui_two.run, 
-            kwargs={'port': 5001}, 
+            kwargs={'port': 5002}, 
             daemon=True
         )
         taipy_thread_two.start()
