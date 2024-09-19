@@ -14,8 +14,7 @@ from questions.models import Choice
 from questions.models import Answer
 
 # Fetch the questions and choices
-Fragen = Question.objects.all()[0:3]
-Choices = Fragen
+Fragen = Question.objects.filter(category='Creative').order_by('display_order')
 
 def choice_adapter(cho: Choice):
     if type(cho) is Choice:
@@ -57,7 +56,7 @@ def weigh_score(state):
 
 selected_choices = {}
 for i, frage in enumerate(Fragen):
-    print(frage.identifier, frage.text)
+    # print(frage.identifier, frage.text)
     selected_choices[f"frage_{i}"] = "A"
 
 # ------------------------------
@@ -71,9 +70,7 @@ for i, frage in enumerate(Fragen):
     ans.selected_choice = frage.get_choice_by_symbol(symbol="A")
     answers.append(ans)
 
-print(answers)
-
-score = 0
+# print(answers)
 
 # Create the questionnaire page with Taipy GUI Builder (TGB)
 from taipy.gui import Gui
@@ -83,7 +80,7 @@ import taipy.gui.builder as tgb
 with tgb.Page() as page:
     # Title and Theme Toggle
     tgb.toggle(theme=True)
-    tgb.text("### Taipy Questionnaire", mode="md", class_name="text-center pb1")
+    tgb.text("### {app_title}", mode="md", class_name="text-center pb1")
 
     # Note: Question List
     with tgb.layout(columns="1 2 1", class_name="text-center"):
@@ -94,7 +91,7 @@ with tgb.Page() as page:
             # Loop through all questions using enumerate and display them dynamically
             for i, frage in enumerate(Fragen):
                 # Display the question text
-                tgb.text(f"#### {frage.text}", mode="md")
+                tgb.text(f"#### {i+1}.{frage.text}", mode="md")
 
                 # Display selector for each question's choices
                 # NOTE: Difference between Django data model and Pydantic 
@@ -134,5 +131,7 @@ if __name__ == "__main__":
     print("Starting Questionnaire app independently...")
 
     # Initialize and run the GUI
+    app_title = "创新型企业问卷"
+    score = 0
     gui = Gui(page=page)
     gui.run(port=5000, reload=True)

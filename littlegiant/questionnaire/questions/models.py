@@ -3,6 +3,9 @@ from django.db import models
 from django.db.models import Sum
 from django.contrib.auth.models import User  # Assuming you are using Django's default User model
 
+# ------------------------------
+# Client without using Django native User
+# ------------------------------
 
 class Client(models.Model):
     name = models.CharField(max_length=255)  # Full name of the user
@@ -10,15 +13,6 @@ class Client(models.Model):
 
     def __str__(self):
         return f"{self.name} from {self.company_name}"
-
-
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)  # Link to the default User model
-    name = models.CharField(max_length=255)  # Full name of the user
-    company_name = models.CharField(max_length=255, blank=True, null=True)  # Company name of the user
-
-    def __str__(self):
-        return f"{self.user.username}'s profile"
 
 # ------------------------------
 # Answer
@@ -45,19 +39,23 @@ class Answer(models.Model):
     def __str__(self):
         return f"{self.client.name}: selected {self.selected_choice.symbol} for {self.question.text}"
 
-    
+# ------------------------------
+# Question
+# ------------------------------
 
 class Question(models.Model):
     CATEGORY_CHOICES = [
         ('Creative', '创新型企业'),
         ('Specialized', '专精特新'),
         ('LittleGiant', '专精特新小巨人'),
+        ('Test', '测试问题')
     ]
 
     identifier = models.CharField(max_length=32, unique=True, null=True, blank=True)  # Temporarily allow null values
     text = models.CharField(max_length=255)  # The question text
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='Creative')  # Category field
     created_at = models.DateTimeField(auto_now_add=True)  # Auto-set the date when the question is created
+    display_order = models.IntegerField(default=1)
 
     def save(self, *args, **kwargs):
         if not self.identifier:
@@ -80,6 +78,9 @@ class Question(models.Model):
         except Choice.DoesNotExist:
             return None
 
+# ------------------------------
+# Choice
+# ------------------------------
 
 class Choice(models.Model):
     SYMBOL_CHOICES = [
@@ -95,6 +96,20 @@ class Choice(models.Model):
     text = models.CharField(max_length=255, default='Please ask a question')  # The choice text
     score = models.IntegerField(default=0)  # Score associated with the choice
 
+    class Meta:
+        unique_together = ('question', 'symbol')  # Unique constraint on question and symbol
+        
     def __str__(self):
         return f"{self.symbol}: {self.text} with Score: {self.score}"
 
+# ------------------------------
+# UserProfile using Django native User
+# ------------------------------
+
+# class UserProfile(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)  # Link to the default User model
+#     name = models.CharField(max_length=255)  # Full name of the user
+#     company_name = models.CharField(max_length=255, blank=True, null=True)  # Company name of the user
+
+#     def __str__(self):
+#         return f"{self.user.username}'s profile"
