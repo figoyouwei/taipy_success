@@ -29,7 +29,7 @@ with tgb.Page() as page:
     tgb.button("Open Pop-up Table", on_action=open_dialog)
 
     # Dialog that will pop up when 'show_dialog' is True
-    with tgb.dialog("{show_dialog}", on_action=close_dialog):
+    with tgb.dialog(open="{show_dialog}", on_action=close_dialog):
         with tgb.layout(columns="1"):
             import polars as pl
             df_fruits = pl.DataFrame(

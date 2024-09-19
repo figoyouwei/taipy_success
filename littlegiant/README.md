@@ -6,3 +6,7 @@
 ```
 python manage.py runserver --noreload
 ```
+
+# Django User
+- taipy_user
+- Taipy2024

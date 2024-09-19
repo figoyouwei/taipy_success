@@ -1,5 +1,22 @@
 from django.contrib import admin
-from .models import Question, Choice
+from .models import Question, Choice, Client
+
+# ------------------------------
+# AnswerAdmin
+# ------------------------------
+
+# ------------------------------
+# ClientAdmin
+# ------------------------------
+
+class ClientAdmin(admin.ModelAdmin):
+    list_display = ('name', 'company_name')  # Fields to display in the admin list view
+
+admin.site.register(Client, ClientAdmin)
+
+# ------------------------------
+# ChoiceInline and QuestionAdmin
+# ------------------------------
 
 class ChoiceInline(admin.TabularInline):
     model = Choice  # Show choices inline when creating/editing questions

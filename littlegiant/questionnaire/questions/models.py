@@ -1,15 +1,51 @@
 import uuid
 from django.db import models
+from django.db.models import Sum
 from django.contrib.auth.models import User  # Assuming you are using Django's default User model
 
+
+class Client(models.Model):
+    name = models.CharField(max_length=255)  # Full name of the user
+    company_name = models.CharField(max_length=255, blank=True, null=True)  # Company name of the user
+
+    def __str__(self):
+        return f"{self.name} from {self.company_name}"
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)  # Link to the default User model
+    name = models.CharField(max_length=255)  # Full name of the user
+    company_name = models.CharField(max_length=255, blank=True, null=True)  # Company name of the user
+
+    def __str__(self):
+        return f"{self.user.username}'s profile"
+
+# ------------------------------
+# Answer
+# ------------------------------
+
+from django.core.exceptions import ObjectDoesNotExist
+
+def get_default_client():
+    first_client = Client.objects.first()  # Get the first Client object
+    if first_client:
+        return first_client.id  # Return the id of the first Client
+    raise ValueError("No Client exists in the database.")  # Raise an error if no clients exist
+
 class Answer(models.Model):
+    client = models.ForeignKey(
+            Client, 
+            on_delete=models.CASCADE, 
+            default=get_default_client  # Use the function to set the default value
+        )
     question = models.ForeignKey('Question', on_delete=models.CASCADE)  # The question that was answered
     selected_choice = models.ForeignKey('Choice', on_delete=models.CASCADE)  # The selected choice
     created_at = models.DateTimeField(auto_now_add=True)  # Timestamp of the answer
 
     def __str__(self):
-        return f"Selected {self.selected_choice.symbol} for {self.question.text}"
+        return f"{self.client.name}: selected {self.selected_choice.symbol} for {self.question.text}"
 
+    
 
 class Question(models.Model):
     CATEGORY_CHOICES = [
@@ -44,6 +80,7 @@ class Question(models.Model):
         except Choice.DoesNotExist:
             return None
 
+
 class Choice(models.Model):
     SYMBOL_CHOICES = [
         ('A', 'A'),
@@ -60,3 +97,4 @@ class Choice(models.Model):
 
     def __str__(self):
         return f"{self.symbol}: {self.text} with Score: {self.score}"
+

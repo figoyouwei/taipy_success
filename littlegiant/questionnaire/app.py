@@ -8,6 +8,7 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "questionnaire.settings")
 django.setup()
 
+from questions.models import Client
 from questions.models import Question
 from questions.models import Choice
 from questions.models import Answer
@@ -32,24 +33,22 @@ def get_selected(state):
     print("-----------")
     for i, frage in enumerate(Fragen):
         state.answers[i].question = frage
-        print(state.selected_choices[f'frage_{i}'])
+        # print(state.selected_choices[f'frage_{i}'])
         state.answers[i].selected_choice = frage.get_choice_by_symbol(
             symbol=state.selected_choices[f'frage_{i}']
             )
         # print(state.answers[i].question)
         # print(state.answers[i].selected_choice)
 
-    print(state.answers)
+    # print(state.answers)
 
 
 def weigh_score(state):
-    print("Getting selected items")
+    print("Calculate selected items")
     print("-----------")
-    for i, frage in enumerate(Fragen):
-        print(frage.text)
-        print(f"Selected: {selected_choices[f'frage_{i}']}")
-
-    state.score = 8
+    # Assume answers is a list of Answer objects
+    total_score = sum(answer.selected_choice.score for answer in state.answers)
+    state.score = total_score
     print("The score: ", state.score)
 
 # ------------------------------
@@ -86,7 +85,7 @@ with tgb.Page() as page:
     tgb.toggle(theme=True)
     tgb.text("### Taipy Questionnaire", mode="md", class_name="text-center pb1")
 
-    # Loop through all questions and their corresponding choices
+    # Note: Question List
     with tgb.layout(columns="1 2 1", class_name="text-center"):
         with tgb.part():
             tgb.text(f"", mode="md")
@@ -107,7 +106,13 @@ with tgb.Page() as page:
                     on_change=get_selected,  # Callback for when the selection changes
                 )
 
-            # Submit button
+    # Note: submit and score
+    with tgb.layout(columns="1 1 1 1", class_name="text-center"):
+        with tgb.part():
+            tgb.text("")
+
+        # Submit button
+        with tgb.part():
             tgb.button(
                 label="Submit",
                 class_name="mt2",
@@ -117,6 +122,9 @@ with tgb.Page() as page:
         with tgb.part():
             tgb.text(f"Score", mode="md")
             tgb.text("{score}", mode="md")
+
+        with tgb.part():
+            tgb.text("")
 
 # ------------------------------
 # Main app
