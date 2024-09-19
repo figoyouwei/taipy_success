@@ -4,6 +4,7 @@ import taipy.gui.builder as tgb
 show_dialog = False
 some_content = "Hello, this is a pop-up"
 
+
 # Initialize the state with 'show_dialog' to False
 def on_init(state: State):
     state.show_dialog = False
@@ -20,8 +21,27 @@ def close_dialog(state: State):
     state.show_dialog = False
 
 
-# Import table page
-from page_table import page as pagetable
+# ------------------------------
+# table page
+# ------------------------------
+
+import pandas as pd
+
+df_fruits = pd.DataFrame(
+    {
+        "fruits": ["apple", "banana", "apple", "banana", "banana"],
+        "prices": [1.0, 2.0, 3.0, 4.0, 5.0],
+    }
+)
+
+# print(df_fruits)
+# print(type(df_fruits))
+
+import taipy.gui.builder as tgb
+
+with tgb.Page() as pagetable:
+    tgb.text("Fruit Table")
+    tgb.table("{df_fruits}")
 
 # Build the page layout
 with tgb.Page() as page:
@@ -29,22 +49,18 @@ with tgb.Page() as page:
     tgb.button("Open Pop-up Table", on_action=open_dialog)
 
     # Dialog that will pop up when 'show_dialog' is True
-    with tgb.dialog(open="{show_dialog}", on_action=close_dialog):
-        with tgb.layout(columns="1"):
-            import polars as pl
-            df_fruits = pl.DataFrame(
-                {
-                    "fruits": ["apple", "banana", "apple", "banana", "banana"],
-                    "prices": [1.0, 2.0, 3.0, 4.0, 5.0],
-                }
-            ).to_pandas()
+    tgb.dialog(open="{show_dialog}", on_action=close_dialog, page="pagetable")
 
-            tgb.text("Fruit Table")
-            tgb.table("{df_fruits}")
-
-            tgb.button("Close", on_action=close_dialog)
+pages = {
+    "/": "", 
+    "page": page, 
+    "pagetable": pagetable
+    }
 
 # Running the GUI
 if __name__ == "__main__":
-    gui = Gui(page=page)
+    gui = Gui(
+        pages=pages,
+        css_file="./dialog.css"
+        )
     gui.run(dark_mode=True, title="Taipy Popup Table v4.0.0dev2")
