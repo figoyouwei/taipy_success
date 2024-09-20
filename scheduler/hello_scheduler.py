@@ -1,7 +1,7 @@
 '''
 @author: Youwei Zheng
 @target: Helloworld example of Taipy scheduler
-@update: 2024.08.27
+@update: 2024.09.20
 '''
 
 import taipy as tp
@@ -11,20 +11,27 @@ import taipy.gui.builder as tgb
 def build_message(name: str):
     return f"Hello {name}!"
 
+# Input node
 name_data_node_cfg = Config.configure_data_node(
     id="input_name", default_data="Figo"
 )
+
+# Output node
 message_data_node_cfg = Config.configure_data_node(id="message")
 
+# Task node
 build_msg_task_cfg = Config.configure_task(
-    "build_msg", build_message, name_data_node_cfg, message_data_node_cfg
+    id="build_msg", 
+    function=build_message, 
+    input=name_data_node_cfg, 
+    output=message_data_node_cfg
 )
 
 scenario_cfg = Config.configure_scenario("scenario", task_configs=[build_msg_task_cfg])
 
 data_node = None
 
-
+# Create page
 with tgb.Page() as page:
     tgb.job_selector()
     with tgb.layout("30 70", columns__mobile="1"):
