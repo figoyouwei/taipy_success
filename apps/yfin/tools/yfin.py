@@ -1,7 +1,7 @@
 '''
 @author: Youwei Zheng
 @target: tools with yfinance
-@update: 2024.08.16
+@update: 2024.09.24
 '''
 
 import pandas as pd
@@ -32,8 +32,11 @@ def download_yfin(args_in: tuple) -> pd.DataFrame:
 
     # Validate input parameters
     try:
-        datetime.strptime(start_date, '%Y-%m-%d')
-        datetime.strptime(end_date, '%Y-%m-%d')
+        if end_date != None:
+            datetime.strptime(start_date, '%Y-%m-%d')
+            datetime.strptime(end_date, '%Y-%m-%d')
+        else:
+            datetime.strptime(start_date, '%Y-%m-%d')
     except ValueError:
         raise ValueError("Invalid date format. Please use 'YYYY-MM-DD'.")
 
@@ -47,11 +50,17 @@ def download_yfin(args_in: tuple) -> pd.DataFrame:
     # Download data
     try:
         print("Downloading from yfin...")
-        data_yf = yf.download(tickers=ticker_symbol, interval=interval, start=start_date, end=end_date)
+        if end_date != None:
+            data_yf = yf.download(tickers=ticker_symbol, interval=interval, start=start_date, end=end_date)
+        else:
+            data_yf = yf.download(tickers=ticker_symbol, interval=interval, start=start_date)
         data_yf.reset_index(inplace=True)
-        # data_yf = data_yf.drop(columns=["Adj Close"])
     except Exception as e:
         raise RuntimeError(f"An error occurred while downloading data: {e}")
+
+    # Check if the index is called 'Date' and rename it to 'Datetime'
+        if data_yf.index.name == 'Date':
+            data_yf.index.name = 'Datetime'    
 
     return data_yf
 
@@ -61,6 +70,13 @@ def download_yfin(args_in: tuple) -> pd.DataFrame:
 
 def process_yfin(data_yfin: pd.DataFrame) -> pd.DataFrame:
     print("Processing data from yfin...")
+    # Note: List of columns in the desired order
+    column_order = [
+        "Datetime", "candle_type", 
+        "High-Low", "Open-Close",
+        "Open", "Close", "High", "Low", "Volume", 
+        ]
+
     # Process pl.dataframe
     data_yfin_pl = (
         pl.from_pandas(data=data_yfin)
@@ -73,21 +89,37 @@ def process_yfin(data_yfin: pd.DataFrame) -> pd.DataFrame:
             pl.col("Close").round(2).alias("Close"),
             (pl.col("Volume") / 1_000_000_000).round(2).alias("Volume"),
         ])
-        # Compute new indicator Range
+        # Note: BOT or SOLD
+        .with_columns(
+            pl.when(pl.col("Close") > pl.col("Open"))
+            .then(pl.lit("BOT"))
+            .otherwise(pl.lit("SOLD"))
+            .alias("candle_type")
+        )
+        # Note: High-Low
         .with_columns([
-            (pl.col("High") - pl.col("Low")).round(2).alias("Range")
+            (pl.col("High") - pl.col("Low")).round(2).alias("High-Low")
         ])    
-        # Compute percentage of Range to Open
+        # Note: Open-Close
         .with_columns([
-            ((pl.col("Range") / pl.col("Open"))*100).round(2).alias("RangePct")
-        ])
-        .sort(by="Date", descending=True)
+            (abs(pl.col("Open") - pl.col("Close"))).round(2).alias("Open-Close")
+        ])        
+        # Compute percentage of Range to Open
+        # .with_columns([
+        #     ((pl.col("Range") / pl.col("Open"))*100).round(2).alias("RangePct")
+        # ])
+        .sort(by="Datetime", descending=False)
+        .select(column_order)
     )
     
-    return data_yfin_pl.to_pandas()
+    data_yfin_pd = data_yfin_pl.to_pandas()
+    data_yfin_pd.set_index('Datetime', inplace=True)
+    
+    return (data_yfin_pl, data_yfin_pd)
 
 # ------------------------------
 # Creating scenario
+# Note: not useful
 # ------------------------------
 
 import taipy as tp

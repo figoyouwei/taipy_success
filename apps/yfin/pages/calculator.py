@@ -7,8 +7,8 @@
 import taipy.gui.builder as tgb
 from taipy.gui import notify
 
-from apps.yfin.models.calculator import Level
-from apps.yfin.turing import compute_points
+from models.calculator import Level
+from turing import compute_points
 
 def filter_reset(state):
     # notify and refresh state
