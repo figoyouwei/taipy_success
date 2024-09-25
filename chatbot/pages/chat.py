@@ -40,9 +40,11 @@ sessions = session_collection.sessions
 # Functions
 # ------------------------------
 
-from tools.chat import chat_tongyi_without_memory
+from tools.chat import chat_tongyi_naive
+from tools.chatrag import chat_suaee
 
 # Example usage in evaluate function
+# Note: what's the meaning of existence? var_name: str
 def evaluate(state, var_name: str, payload: dict):
     notify(state, "I", f"We are preparing your answer...")
     print("We are preparing your answer...")
@@ -51,13 +53,13 @@ def evaluate(state, var_name: str, payload: dict):
     (_, _, message_hm, sender_id) = payload.get("args", [])
 
     # Append human message
-    state.chat_session.add_message(content=message_hm, sender="Robot")
+    state.chat_session.add_message(content=message_hm, sender="Human")
 
     # Default message used if evaluation fails
     result = "Invalid expression"
     try:
         # Evaluate the expression and store the result
-        result = chat_tongyi_without_memory(message_hm)
+        result = chat_suaee(message_hm)
     except Exception:
         pass
 

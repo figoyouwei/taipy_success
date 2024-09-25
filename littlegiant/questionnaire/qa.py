@@ -128,7 +128,7 @@ with tgb.Page() as page:
 # ------------------------------
 
 if __name__ == "__main__":
-    print("Starting Questionnaire app independently...")
+    print("Starting Questionnaire app...")
 
     # Initialize and run the GUI
     app_title = "创新型企业问卷"

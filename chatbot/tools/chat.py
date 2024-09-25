@@ -6,7 +6,7 @@
 
 from utils import create_tongyi_client
 
-def chat_tongyi_without_memory(hm: str) -> str:
+def chat_tongyi_naive(hm: str) -> str:
     """_summary_
 
     Args:
@@ -19,7 +19,6 @@ def chat_tongyi_without_memory(hm: str) -> str:
     # hm = "Do you know Luis Figo?"
     chatllm_client = create_tongyi_client()
     
-    # TODO: just change to chain.invoke()
     message = chatllm_client.invoke(hm)
 
     return message.content

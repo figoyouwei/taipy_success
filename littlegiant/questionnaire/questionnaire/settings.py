@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # NOTE: apps
     'questions',
+    'dokuments',
     # 'questions.threads.AppsConfig',  # Use as demo
 ]
 

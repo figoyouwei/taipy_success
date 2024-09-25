@@ -11,6 +11,7 @@ taipy = "4.0.0.dev2"
 openai = "^1.43.0"
 langchain-community = "^0.2.15"
 dashscope = "^1.20.8"
+faiss-cpu = "^1.8.0.post1"
 
 
 [tool.poetry.group.dev.dependencies]
