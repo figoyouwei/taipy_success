@@ -8,6 +8,7 @@ taipy_success.code-workspace
 
 # Local settings
 .DS_Store
+.idea/
 .vscode/
 **/__pycache__/
 **/user_data/

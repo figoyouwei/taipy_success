@@ -59,7 +59,7 @@ def evaluate(state, var_name: str, payload: dict):
     result = "Invalid expression"
     try:
         # Evaluate the expression and store the result
-        result = chat_suaee(message_hm)
+        result = chat_tongyi_naive(message_hm)
     except Exception:
         pass
 
@@ -77,7 +77,8 @@ def evaluate(state, var_name: str, payload: dict):
 with tgb.Page() as page_chat:
     # Doc for chat control: https://docs.taipy.io/en/develop/manuals/userman/gui/viselements/generic/chat/
     tgb.chat(
-        messages="{messages}",
+        # Note: messages is actually the "var_name" in the evaluate function
+        messages="{messages}", 
         users=users, 
         on_action=evaluate, 
         sender_id="Human"

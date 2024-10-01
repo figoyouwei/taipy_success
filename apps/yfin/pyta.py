@@ -23,10 +23,15 @@ df_pd
 # Main app
 # ------------------------------
 
+from taipy.gui import Gui
+
 if __name__ == "__main__":
     print("Visualizing candles...")
-    mpf.plot(
+
+    fig = mpf.plot(
         data=df_pd, 
         type="candle", 
         style="charles",
         )
+    
+    Gui("<|chart|figure={fig}|height=800px|>").run(port=5000)
