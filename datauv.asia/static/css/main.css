@@ -1,0 +1,20 @@
+.css-aj5n3t {
+    display: grid;
+    gap: 3.0rem;
+    grid-template-columns: 2fr 8fr;
+}
+
+.sidebar {
+    left: 2.0rem;
+}
+
+.h4-height {
+    height: 10px;
+    line-height: 0px;
+    color: white;
+}
+
+.image-text-container {
+    display: flex;
+    align-items: center;
+}    
