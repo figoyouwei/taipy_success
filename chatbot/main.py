@@ -1,7 +1,7 @@
 """
 @author: Youwei Zheng
-@target: Issue #13 solved
-@update: 2024.09.11
+@target: Solved icon-display issue with Taipy v4.0.0
+@update: 2024.10.15
 """
 
 from dotenv import find_dotenv, load_dotenv
@@ -25,6 +25,6 @@ if __name__ == "__main__":
     partial_chat = gui.add_partial(page_chat)
 
     gui.run(
-        dark_mode=True, 
-        title="Taipy Chat Demo v4.0.0dev2"
+        dark_mode=True,
+        title="Taipy Chat Demo v4.0.0"
         )

@@ -94,7 +94,7 @@ def chat_suaee(query: str):
 
 if __name__ == "__main__":
     # Example user query
-    query = "你好呀"   
-    answer = evaluate(query)
+    query = "什么是非公开协议转让项目？"
+    answer = chat_suaee(query)
     print("Result from evaluation:")
     print(answer)

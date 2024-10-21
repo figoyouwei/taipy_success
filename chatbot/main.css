@@ -1,27 +1,37 @@
-/* receiver order */
 .taipy-chat-sent > .MuiGrid2-root > .MuiStack-root {
-    flex-direction: row-reverse;
+    flex-direction: row;
 }
-/* receiver avatar */
+
 .taipy-chat-sent > .MuiGrid2-root > .MuiStack-root > .MuiBox-root {
     padding-top: 1em;
 }
-/* receiver name */
-.taipy-chat-sent .MuiStack-root .MuiStack-root .MuiBox-root {
-    text-align: end;
-    margin-right: -36px;
-    padding-right: 0;
+
+.taipy-chat-sent > .MuiGrid2-root > .MuiStack-root > .MuiStack-root > .MuiBox-root {
+    left: 35px;
+    position: relative;
+    padding-right:0;
+    padding-left: 0;
 }
 
-/* received avatar */
+.taipy-chat-sent > .MuiStack-root > .MuiStack-root {
+    margin-right: -44px;
+}
+
+.taipy-chat-sent > .MuiStack-root > .MuiStack-root > .MuiPaper-root {
+    margin-right: 54px;
+}
+
 .taipy-chat-received > .MuiGrid2-root > .MuiStack-root > .MuiBox-root {
     padding-top: 1em;
 }
 
-/* received user name */
 .taipy-chat-received .MuiStack-root .MuiStack-root .MuiBox-root {
     margin-left: -44px;
     padding-left: 0;
+}
+
+.taipy-part .p2 {
+    padding-bottom: 0 !important;
 }
 
 /* chat main frame */
@@ -37,3 +47,6 @@
     transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 8px;
 }
+
+/* chatbox padding settings */
+/* please add code here */

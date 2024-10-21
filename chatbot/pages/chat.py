@@ -1,7 +1,7 @@
 """
 @author: Youwei Zheng
 @target: chat page partial
-@update: 2024.09.06
+@update: 2024.10.15
 """
 
 import taipy.gui.builder as tgb
@@ -17,8 +17,8 @@ from models.chat import ChatMessage, ChatSession, SessionCollection
 
 # NOTE: The user interacts with the Python interpreter only via css to change icon size
 users: List[List[str]] = [
-    ["Human", Icon("/icons/icon_hm.png")],
-    ["Robot", Icon("/icons/icon_ai.png")],
+    ["Human", Icon("icons/icon_hm.png")],
+    ["Robot", Icon("icons/icon_ai.png")],
 ]
 
 # * Initialize empty messages
@@ -59,7 +59,7 @@ def evaluate(state, var_name: str, payload: dict):
     result = "Invalid expression"
     try:
         # Evaluate the expression and store the result
-        result = chat_tongyi_naive(message_hm)
+        result = chat_suaee(message_hm)
     except Exception:
         pass
 
@@ -79,9 +79,12 @@ with tgb.Page() as page_chat:
     tgb.chat(
         # Note: messages is actually the "var_name" in the evaluate function
         messages="{messages}", 
-        users=users, 
+        users=users,
         on_action=evaluate, 
-        sender_id="Human"
+        sender_id="Human",
+        # NOTE: to solve icon issue
+        show_sender=True,
+        height="80vh",
     )
     
 # ------------------------------
