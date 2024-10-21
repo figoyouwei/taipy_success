@@ -40,7 +40,8 @@ sessions = session_collection.sessions
 # Functions
 # ------------------------------
 
-from tools.chat import chat_tongyi_naive
+from tools.chatcompletion import chat_openai
+from tools.chatcompletion import chat_tongyi_naive
 from tools.chatrag import chat_suaee
 
 # Example usage in evaluate function
@@ -59,7 +60,7 @@ def evaluate(state, var_name: str, payload: dict):
     result = "Invalid expression"
     try:
         # Evaluate the expression and store the result
-        result = chat_suaee(message_hm)
+        result = chat_openai(message_hm)
     except Exception:
         pass
 
