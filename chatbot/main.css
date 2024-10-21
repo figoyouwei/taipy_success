@@ -4,10 +4,11 @@
 
 .taipy-chat-sent > .MuiGrid2-root > .MuiStack-root > .MuiBox-root {
     padding-top: 1em;
+    padding-left: 10px;
 }
 
 .taipy-chat-sent > .MuiGrid2-root > .MuiStack-root > .MuiStack-root > .MuiBox-root {
-    left: 35px;
+    left: 44px;
     position: relative;
     padding-right:0;
     padding-left: 0;
@@ -48,5 +49,10 @@
     border-radius: 8px;
 }
 
-/* chat-frame padding settings */
-/* please add code here */
+/* chatframe padding settings */
+.taipy-chat {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+}

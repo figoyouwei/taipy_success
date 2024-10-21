@@ -1,7 +1,7 @@
 """
 @author: Youwei Zheng
 @target: Solved icon-display issue with Taipy v4.0.0
-@update: 2024.10.15
+@update: 2024.10.21
 """
 
 from dotenv import find_dotenv, load_dotenv
@@ -26,5 +26,5 @@ if __name__ == "__main__":
 
     gui.run(
         dark_mode=True,
-        title="Taipy Chat Demo v4.0.0"
+        title="Chat Demo v4.0.0"
         )
