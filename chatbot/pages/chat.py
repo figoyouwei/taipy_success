@@ -60,7 +60,7 @@ def evaluate(state, var_name: str, payload: dict):
     result = "Invalid expression"
     try:
         # Evaluate the expression and store the result
-        result = chat_openai(message_hm)
+        result = chat_tongyi_naive(message_hm)
     except Exception:
         pass
 
