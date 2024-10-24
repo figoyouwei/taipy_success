@@ -37,7 +37,6 @@ def has_role(role):
 is_admin = has_role("admin")
 is_reader = has_role("reader")
 
-
 # Login function
 def on_login(state: State, id, login_args):
     # Extract username and password from login_args
@@ -47,20 +46,15 @@ def on_login(state: State, id, login_args):
         # Attempt to log in using Taipy Enterprise
         state.credentials = tp_enterprise.login(state, state.username, password)
         notify(state, "success", f"Logged in as {state.username}...")
-        navigate(state, "Overview", force=True)
+        navigate(state, "Overview", force=False)
     except Exception as e:
         notify(state, "error", f"Login failed: {e}")
         print(f"Login exception: {e}")
-        navigate(state, "Login", force=True)
-
+        navigate(state, to="LoginDialog", force=False)
 
 # Function to navigate to the login page
 def navigate_to_login(state: State):
-    navigate(state=state, to="LoginDialog", force=True)
-
-
-# Initialize root page
-# root_page = ""
+    navigate(state=state, to="LoginDialog", force=False)
 
 # Create sample data for display
 data = pd.DataFrame({"a": [1, 2, 3], "b": [4, 5, 6]})
@@ -76,9 +70,8 @@ with tgb.Page() as login_page:
 # Define Overview page
 with tgb.Page() as Overview:
     tgb.text(value="# Welcome to Taipy, {username}", mode="md")
-    # tgb.text(value="{username}")
     # Display table only if user has admin role
-    with tgb.part(render="{has_role('admin')}"):
+    with tgb.part(render="{is_admin.get_traits(credentials)}"):
         tgb.table(data="{data}")
 
 # Define page routing
