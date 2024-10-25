@@ -3,7 +3,7 @@ import pandas as pd
 
 from taipy.gui import Gui, State, navigate, notify
 import taipy.gui.builder as tgb
-from taipy.config import Config
+from taipy.core.config import Config
 from taipy.auth import hash_taipy_password, AnyOf, Credentials
 import taipy.enterprise.gui as tp_enterprise
 
@@ -24,6 +24,7 @@ roles = {
     "alexandre": ["TAIPY_READER"],
 }
 
+# Important for authentication
 Config.configure_authentication("taipy", passwords=passwords, roles=roles)
 
 is_admin = AnyOf("admin", True, False)
