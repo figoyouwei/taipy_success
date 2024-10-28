@@ -43,7 +43,7 @@ with tgb.Page() as page_home:
             )
 
             # NOTE: selector part
-            tgb.text("### Previous activities", mode="md", class_name="h5 mt2 mb-half")
+            tgb.text("### Previous activities", mode="md", class_name="h5 mt2 mb-half text-center")
             tgb.selector(
                 value="{selected_session}",
                 lov="{sessions}",

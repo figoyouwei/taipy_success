@@ -29,7 +29,7 @@ Config.configure_authentication("taipy", passwords=passwords, roles=roles)
 
 is_admin = AnyOf("admin", True, False)
 
-# NOTE: overwrite default login function?
+# NOTE: global function recognized by Taipy
 def on_login(state: State, id, login_args):
     state.username, password = login_args["args"][:2]
     try:
@@ -54,6 +54,7 @@ with tgb.Page() as root_page:
     tgb.button("Account", on_action=go_to_login, class_name="login_button plain")
 
 with tgb.Page() as login_page:
+    # NOTE: trigger dialog
     tgb.login("Welcome to Taipy!")
 
 with tgb.Page() as Overview:
