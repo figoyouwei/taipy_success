@@ -1,7 +1,7 @@
 """
 @author: Youwei Zheng
 @target: chat page partial
-@update: 2024.10.15
+@update: 2024.10.28
 """
 
 import taipy.gui.builder as tgb
@@ -40,13 +40,17 @@ sessions = session_collection.sessions
 # Functions
 # ------------------------------
 
-from tools.chatcompletion import chat_openai
-from tools.chatcompletion import chat_tongyi_naive
 from tools.chatrag import chat_suaee
+from tools.chatcpl import chat_openai
+from tools.chatcpl import chat_tongyi_naive
+
+chatllm = chat_tongyi_naive
 
 # Example usage in evaluate function
-# Note: what's the meaning of existence? var_name: str
+# Note: var_name is not very important in the chat context.
 def evaluate(state, var_name: str, payload: dict):
+    chatbot = state.chatllm
+
     notify(state, "I", f"We are preparing your answer...")
     print("We are preparing your answer...")
 
@@ -60,7 +64,7 @@ def evaluate(state, var_name: str, payload: dict):
     result = "Invalid expression"
     try:
         # Evaluate the expression and store the result
-        result = chat_tongyi_naive(message_hm)
+        result = chatbot(message_hm)
     except Exception:
         pass
 

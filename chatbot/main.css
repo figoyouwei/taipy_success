@@ -56,3 +56,8 @@
     padding-left: 20px;
     padding-right: 20px;
 }
+
+/* chatframe scroll bar */
+.taipy-chat > .MuiGrid2-root {
+    padding-right: 20px;
+}

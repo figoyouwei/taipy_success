@@ -21,7 +21,7 @@ messages: list[tuple[str, str, str]] = []
 # Action function
 # ------------------------------
 
-from tools.chatcompletion import chat_tongyi
+from tools.chatcpl import chat_tongyi
 
 def evaluate(state, var_name: str, payload: dict):
     """_summary_
