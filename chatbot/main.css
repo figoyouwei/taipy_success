@@ -61,3 +61,19 @@
 .taipy-chat > .MuiGrid2-root {
     padding-right: 20px;
 }
+
+/* sidebar profile */
+.profile_name {
+    margin-top: 0px;
+}
+
+.profile_image {
+    width: 100px !important;
+    height: 100px;
+    border-radius: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-top: 30px;
+    object-fit: cover;
+}
