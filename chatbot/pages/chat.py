@@ -1,9 +1,10 @@
 """
 @author: Youwei Zheng
 @target: chat page partial
-@update: 2024.10.28
+@update: 2024.10.31
 """
 
+import asyncio
 import taipy.gui.builder as tgb
 from taipy.gui import notify, Icon
 
@@ -48,7 +49,7 @@ chatllm = chat_tongyi_naive
 
 # Example usage in evaluate function
 # Note: var_name is not very important in the chat context.
-def evaluate(state, var_name: str, payload: dict):
+async def evaluate(state, var_name: str, payload: dict):
     chatbot = state.chatllm
 
     notify(state, "I", f"We are preparing your answer...")
@@ -64,7 +65,7 @@ def evaluate(state, var_name: str, payload: dict):
     result = "Invalid expression"
     try:
         # Evaluate the expression and store the result
-        result = chatbot(message_hm)
+        result = await chatbot(message_hm)
     except Exception:
         pass
 
