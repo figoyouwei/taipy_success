@@ -1,3 +1,5 @@
+/* Last udpated on 2024.10.31 */
+
 .taipy-chat-sent > .MuiGrid2-root > .MuiStack-root {
     flex-direction: row;
 }
@@ -76,4 +78,10 @@
     display: block;
     margin-top: 30px;
     object-fit: cover;
+}
+
+/* watermark */
+.taipy-watermark {
+    transform: rotate(-45deg) translate(150px, -300px) !important;
+    font-size: 3em !important;
 }

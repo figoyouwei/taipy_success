@@ -1,3 +1,9 @@
+"""
+@author: Youwei Zheng
+@target: sidebar page
+@update: 2024.10.31
+"""
+
 import taipy.gui.builder as tgb
 from models.chat import ChatSession
 
