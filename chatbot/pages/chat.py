@@ -45,11 +45,11 @@ from tools.chatrag import chat_suaee
 from tools.chatcpl import chat_openai
 from tools.chatcpl import chat_tongyi_naive
 
-chatllm = chat_tongyi_naive
+chatllm = chat_openai
 
 # Example usage in evaluate function
 # Note: var_name is not very important in the chat context.
-async def evaluate(state, var_name: str, payload: dict):
+def evaluate(state, var_name: str, payload: dict):
     chatbot = state.chatllm
 
     notify(state, "I", f"We are preparing your answer...")
@@ -65,7 +65,7 @@ async def evaluate(state, var_name: str, payload: dict):
     result = "Invalid expression"
     try:
         # Evaluate the expression and store the result
-        result = await chatbot(message_hm)
+        result = chatbot(message_hm)
     except Exception:
         pass
 

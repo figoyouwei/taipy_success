@@ -32,7 +32,7 @@ if __name__ == "__main__":
 
     gui.run(
         dark_mode=True,
-        title="Chat Demo v4.0",
+        title="Chat Demo v4.0.1",
         watermark="Shanghai Exchange Group",
         use_reloader=True,
     )

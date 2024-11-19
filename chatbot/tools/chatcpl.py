@@ -8,7 +8,7 @@ from utils import create_tongyi_client
 from utils import create_openai_client
 
 
-async def chat_tongyi_naive(hm: str) -> str:
+def chat_tongyi_naive(hm: str) -> str:
     """Chat completion using Tongyi API
 
     Args:
@@ -19,7 +19,7 @@ async def chat_tongyi_naive(hm: str) -> str:
     """
     chatllm_client = create_tongyi_client()
     # Assuming create_tongyi_client().invoke is async
-    message = await chatllm_client.invoke(hm)
+    message = chatllm_client.invoke(hm)
     return message.content
     
 
