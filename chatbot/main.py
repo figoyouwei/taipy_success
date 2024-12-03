@@ -1,7 +1,7 @@
 """
 @author: Youwei Zheng
 @target: Add partial sidebar
-@update: 2024.11.11
+@update: 2024.12.26
 """
 
 from dotenv import find_dotenv, load_dotenv

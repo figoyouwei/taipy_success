@@ -32,8 +32,13 @@ sidebar_switch = False
 def toggle_partial_sidebar(state):
     if state.sidebar_switch:
         with tgb.Page() as sidebar:
-            tgb.toggle("{sidebar_switch}", on_change=toggle_partial_sidebar)
-            tgb.part(class_name="p2 align-item-bottom table", partial="{partial_chat}")
+            with tgb.layout(columns="1 11", columns__mobile="1"):
+                with tgb.part(class_name="sidebar"):
+                    tgb.toggle("{sidebar_switch}", on_change=toggle_partial_sidebar)
+                tgb.part(
+                    class_name="p2 align-item-bottom table",
+                    partial="{partial_chat}",
+                )
     else:
         with tgb.Page() as sidebar:
             with tgb.layout(columns="1 3", columns__mobile="1"):
@@ -43,23 +48,11 @@ def toggle_partial_sidebar(state):
                     tgb.image(content="icons/icon_hm.png", class_name="profile_image")
                     # sidebar titles
                     tgb.text(
-                        "## Username", class_name="text-center profile_name", mode="md"
+                        "#### Username", class_name="text-center profile_name", mode="md"
                         )
                     tgb.text(
                         "## Verified Name", class_name="text-center", mode="md"
                         )
-
-                    tgb.selector(
-                        value="{selected_session}",
-                        lov="{sessions}",
-                        on_change=select_session,
-                        # NOTE: displayed text of selector item
-                        type=ChatSession,
-                        adapter=selector_adapter,
-                        # NOTE: css identifier
-                        id="past_prompts_list",
-                        class_name="past_prompts_list",
-                    )
 
                     # NOTE: reset part
                     tgb.button(
@@ -74,6 +67,19 @@ def toggle_partial_sidebar(state):
                         mode="md",
                         class_name="h5 mt2 mb-half text-center",
                     )
+
+                    tgb.selector(
+                        value="{selected_session}",
+                        lov="{sessions}",
+                        on_change=select_session,
+                        # NOTE: displayed text of selector item
+                        type=ChatSession,
+                        adapter=selector_adapter,
+                        # NOTE: css identifier
+                        id="past_prompts_list",
+                        class_name="past_prompts_list",
+                    )
+
                 tgb.part(
                     class_name="p2 align-item-bottom table", partial="{partial_chat}"
                 )
