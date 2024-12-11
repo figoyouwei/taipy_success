@@ -3,7 +3,7 @@ import pandas as pd
 
 from taipy.gui import Gui, State, navigate, notify
 import taipy.gui.builder as tgb
-from taipy.config import Config
+from taipy.core.config import Config
 from taipy.auth import hash_taipy_password, AnyOf, Credentials
 import taipy.enterprise.gui as tp_enterprise
 
@@ -65,11 +65,11 @@ with tgb.Page() as root_page:
 
 # Define login page
 with tgb.Page() as login_page:
-    tgb.login("Welcome to Taipy!")
+    tgb.login("Welcome to Chatbot!")
 
 # Define Overview page
 with tgb.Page() as Overview:
-    tgb.text(value="# Welcome to Taipy, {username}", mode="md")
+    tgb.text(value="# Welcome to Shanghai Exchange Group, {username}", mode="md")
     # Display table only if user has admin role
     with tgb.part(render="{is_admin.get_traits(credentials)}"):
         tgb.table(data="{data}")
