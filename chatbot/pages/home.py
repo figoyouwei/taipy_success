@@ -48,10 +48,7 @@ def toggle_partial_sidebar(state):
                     tgb.image(content="icons/icon_hm.png", class_name="profile_image")
                     # sidebar titles
                     tgb.text(
-                        "#### Username", class_name="text-center profile_name", mode="md"
-                        )
-                    tgb.text(
-                        "## Verified Name", class_name="text-center", mode="md"
+                        "#### {username}", class_name="text-center profile_name", mode="md"
                         )
 
                     # NOTE: reset part
@@ -85,7 +82,6 @@ def toggle_partial_sidebar(state):
                 )
 
     state.partial_sidebar.update_content(state, sidebar)
-
 
 with tgb.Page() as page_home:
     tgb.part(partial="{partial_sidebar}")

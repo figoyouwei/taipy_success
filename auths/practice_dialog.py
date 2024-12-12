@@ -45,9 +45,9 @@ def go_to_login(state: State):
     navigate(state, "login_page", force=True)
 
 
-root_page = ""
-
 data = pd.DataFrame({"a": [1, 2, 3], "b": [4, 5, 6]})
+
+root_page = ""
 
 with tgb.Page() as root_page:
     tgb.button("Account", on_action=go_to_login, class_name="login_button plain")
