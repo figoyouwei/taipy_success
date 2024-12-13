@@ -31,22 +31,25 @@ def on_init(state):
     print("Finished toggle_partial_sidebar")
         
     # Add this line to ensure the partial has access to the state
-    # state.partial_chat.update_state(state, page_chat)
+    state.partial_chat.update_state(state, page_chat)
+    print("Finished updating state of partial_chat")
 
 # ------------------------------
 # Main app
 # ------------------------------
 
 if __name__ == "__main__":
-    print("Starting running the app...")
-
+    print("Initializing gui object...")
     gui = Gui(page=page_home, css_file="./main.css")
+
     # Create partial without state_vars parameter
+    print("Adding partial chat...")
     partial_chat = gui.add_partial(page_chat)
+
+    print("Adding partial sidebar...")
     partial_sidebar = gui.add_partial("")
 
-    print("Finished running the app...")
-    
+    print("Running gui object...")    
     gui.run(
         dark_mode=True,
         title="Chat Demo v4.0.1",

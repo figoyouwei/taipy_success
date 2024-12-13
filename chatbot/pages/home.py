@@ -50,7 +50,7 @@ def toggle_partial_sidebar(state):
                     tgb.image(content="icons/icon_hm.png", class_name="profile_image")
                     # sidebar titles
                     tgb.text(
-                        "#### {state.user_session_id}", class_name="text-center profile_name", mode="md"
+                        "#### {user_session_id}", class_name="text-center profile_name", mode="md"
                     )
 
                     # NOTE: reset part

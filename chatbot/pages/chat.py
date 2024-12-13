@@ -37,9 +37,6 @@ selected_session = ChatSession(messages=[])
 session_collection = SessionCollection()
 sessions = session_collection.sessions
 
-# * Initialize user session id
-user_session_id = None
-
 # ------------------------------
 # Functions
 # ------------------------------
