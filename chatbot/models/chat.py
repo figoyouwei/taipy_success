@@ -16,34 +16,33 @@ class ChatMessage(BaseModel):
 
 
 class ChatSession(BaseModel):
-    # user_session_id: str
+    user_session_id: str
     chat_session_no: int = 1
     chat_session_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     messages: List[ChatMessage]
 
     def add_message(self, content: str, sender: str):
-        # Changed 'id' to 'message_id' to match the class definition
         new_id = len(self.messages) + 1
         self.messages.append(ChatMessage(message_id=new_id, content=content, sender=sender))
 
     def update_messages(self, new_messages: List[ChatMessage]):
         """Update the session messages with new messages."""
         self.messages = new_messages
-        print(f"Session {self.chat_session_no} messages updated.")  # Changed session_no to chat_session_no
+        print(f"Session {self.chat_session_no} messages updated for user {self.user_session_id}")
         
     def to_list(self) -> List[List[str]]:
         """Convert ChatMessage instances to a list of lists."""
         return [[str(msg.message_id), msg.content, msg.sender] for msg in self.messages]
 
     @classmethod
-    def from_list(cls, message_list: List[List[str]]):
+    def from_list(cls, message_list: List[List[str]], user_session_id: str):
         """Convert a list of lists to ChatMessage instances and create a ChatSession."""
         messages = [
             ChatMessage(message_id=int(item[0]), content=item[1], sender=item[2])
             for item in message_list
         ]
-        return cls(messages=messages)
-    
+        return cls(messages=messages, user_session_id=user_session_id)
+
 
 class SessionCollection(BaseModel):
     sessions: List[ChatSession] = []
@@ -57,4 +56,11 @@ class SessionCollection(BaseModel):
         for session in self.sessions:
             if session.chat_session_id == session_id:
                 return session
-        return None  # Return None if no session with the given ID is found
+        return None
+
+    def get_user_sessions(self, user_session_id: str) -> List[ChatSession]:
+        """Retrieve all ChatSessions for a specific user."""
+        return [
+            session for session in self.sessions 
+            if session.user_session_id == user_session_id
+        ]

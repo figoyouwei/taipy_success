@@ -1,7 +1,7 @@
 """
 @author: Youwei Zheng
 @target: chat page partial
-@update: 2024.10.31
+@update: 2024.12.13
 """
 
 import asyncio
@@ -23,17 +23,25 @@ users: List[List[str]] = [
 ]
 
 # * Initialize empty messages
-empty_messages = [
-    ChatMessage(message_id=1, content="Who are you?", sender="Human"),
-    ChatMessage(message_id=2, content="Hi! I am GPT-4. How can I help you today?", sender="Robot"),
-]
+def create_initial_chat_session(user_session_id: str):
+    return ChatSession(
+        user_session_id=user_session_id,
+        messages=[
+            ChatMessage(message_id=1, content="Who are you?", sender="Human"),
+            ChatMessage(message_id=2, content="Hi! I am GPT-4. How can I help you today?", sender="Robot"),
+        ]
+    )
 
 # * Initialize chat session as current session
-chat_session = ChatSession(messages=empty_messages)
+empty_messages = create_initial_chat_session("").messages  # Add this line to define empty_messages
+print("empty_messages: ", empty_messages)
+
+# * Initialize chat session as current session
+chat_session = ChatSession(messages=empty_messages, user_session_id="")
 messages = chat_session.to_list()
 
 # * Initialize selected conversation and history conversations which contain messages
-selected_session = ChatSession(messages=[])
+selected_session = ChatSession(messages=[], user_session_id="") 
 session_collection = SessionCollection()
 sessions = session_collection.sessions
 
@@ -55,11 +63,15 @@ def evaluate(state, var_name: str, payload: dict):
     notify(state, "I", f"We are preparing your answer...")
     print("We are preparing your answer for user: ", state.user_session_id)
 
+    print("chat_session.user_session_id: ", state.chat_session.user_session_id)
+
+    # Initialize chat_session if it doesn't exist or user_session_id is empty
+    if state.chat_session is None or state.chat_session.user_session_id == "":
+        state.chat_session = create_initial_chat_session(state.user_session_id)
+        print("chat_session initialized with user_session_id: ", state.user_session_id)
+
     # Retrieve the callback parameters
     (_, _, message_hm, sender_id) = payload.get("args", [])
-
-    # Append human message
-    state.chat_session.add_message(content=message_hm, sender="Human")
     
     # Default message used if evaluation fails
     result = "Invalid expression"
@@ -69,8 +81,10 @@ def evaluate(state, var_name: str, payload: dict):
     except Exception:
         pass
 
-    # Append AI message
+    # Append human message
+    state.chat_session.add_message(content=message_hm, sender="Human")
     state.chat_session.add_message(content=result, sender="Robot")
+
     print("session updated...")
     print(state.chat_session)
 
@@ -186,3 +200,28 @@ def get_message_title_by_id(messages: List[ChatMessage], message_id: int) -> str
 def selector_adapter(sess: ChatSession):
     message_title = get_message_title_by_id(sess.messages, 3)
     return (sess.chat_session_no, message_title)
+
+# ------------------------------
+# State Initialization
+# ------------------------------
+
+def init_chat(state):
+    """Initialize all chat-related state variables"""
+    
+    # User configuration
+    state.users = [
+        ["Human", Icon("icons/icon_hm.png")],
+        ["Robot", Icon("icons/icon_ai.png")],
+    ]
+
+    # Create initial messages
+    empty_messages = create_initial_chat_session(state.user_session_id).messages
+    
+    # Initialize chat session and messages
+    state.chat_session = ChatSession(messages=empty_messages, user_session_id=state.user_session_id)
+    state.messages = state.chat_session.to_list()
+    
+    # Initialize session management
+    state.selected_session = ChatSession(messages=[], user_session_id=state.user_session_id)
+    state.session_collection = SessionCollection()
+    state.sessions = state.session_collection.sessions

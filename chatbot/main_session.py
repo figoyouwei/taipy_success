@@ -10,10 +10,8 @@ from dotenv import find_dotenv, load_dotenv
 load_dotenv(find_dotenv())
 
 from taipy.gui import Gui
-from pages.home import page_home
-from pages.chat import page_chat
-
-from pages.home import toggle_partial_sidebar
+from pages.home import page_home, toggle_partial_sidebar
+from pages.chat import page_chat, init_chat
 
 # ------------------------------
 # on_init is created by taipy
