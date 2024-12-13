@@ -24,8 +24,8 @@ users: List[List[str]] = [
 
 # * Initialize empty messages
 empty_messages = [
-    ChatMessage(id=1, content="Who are you?", sender="Human"),
-    ChatMessage(id=2, content="Hi! I am GPT-4. How can I help you today?", sender="Robot"),
+    ChatMessage(message_id=1, content="Who are you?", sender="Human"),
+    ChatMessage(message_id=2, content="Hi! I am GPT-4. How can I help you today?", sender="Robot"),
 ]
 
 # * Initialize chat session as current session
@@ -36,6 +36,9 @@ messages = chat_session.to_list()
 selected_session = ChatSession(messages=[])
 session_collection = SessionCollection()
 sessions = session_collection.sessions
+
+# * Initialize user session id
+user_session_id = None
 
 # ------------------------------
 # Functions
@@ -53,14 +56,14 @@ def evaluate(state, var_name: str, payload: dict):
     chatbot = state.chatllm
 
     notify(state, "I", f"We are preparing your answer...")
-    print("We are preparing your answer...")
+    print("We are preparing your answer for user: ", state.user_session_id)
 
     # Retrieve the callback parameters
     (_, _, message_hm, sender_id) = payload.get("args", [])
 
     # Append human message
     state.chat_session.add_message(content=message_hm, sender="Human")
-
+    
     # Default message used if evaluation fails
     result = "Invalid expression"
     try:
@@ -71,16 +74,20 @@ def evaluate(state, var_name: str, payload: dict):
 
     # Append AI message
     state.chat_session.add_message(content=result, sender="Robot")
+    print("session updated...")
+    print(state.chat_session)
+
+    # NOTE: update messages
     state.messages = state.chat_session.to_list()
 
-    # NOTE: update chat.content
+    # NOTE: update frontend
     state.partial_chat.update_content(state, page_chat)
 
 # ------------------------------
 # Create page
 # ------------------------------
 
-with tgb.Page() as page_chat:
+with tgb.Page() as page_chat:   
     # Doc for chat control: https://docs.taipy.io/en/develop/manuals/userman/gui/viselements/generic/chat/
     tgb.chat(
         # Note: messages is actually the "var_name" in the evaluate function
@@ -117,7 +124,7 @@ def reset_session(state) -> None:
         return
 
     # Check if the current session already exists in the session_collection
-    existing_session = next((s for s in state.session_collection.sessions if s.session_id == state.chat_session.session_id), None)
+    existing_session = next((s for s in state.session_collection.sessions if s.chat_session_id == state.chat_session.chat_session_id), None)
 
     if existing_session:
         # Update the existing session's messages using the new method
@@ -125,7 +132,7 @@ def reset_session(state) -> None:
     else:
         # Add the current session to the collection
         state.session_collection.add_session(state.chat_session)
-        print(f"Current session with id {state.chat_session.session_id} was added to the session collection.")
+        print(f"Current session with id {state.chat_session.chat_session_id} was added to the session collection.")
 
     print(state.session_collection.sessions)
 
@@ -133,8 +140,8 @@ def reset_session(state) -> None:
     new_session_no = len(state.session_collection.sessions) + 1
 
     # Create a new ChatSession with the incremented session_no (starting from 1)
-    state.chat_session = ChatSession(session_no=new_session_no, messages=empty_messages)
-    print(f"A new session with session_no {new_session_no} has been created.")
+    state.chat_session = ChatSession(chat_session_no=new_session_no, messages=empty_messages)
+    print(f"A new session with chat_session_no {new_session_no} has been created.")
 
     # NOTE: update chat
     state.messages = state.chat_session.to_list()
@@ -174,14 +181,11 @@ def select_session(state, var_name: str, value) -> None:
 # ------------------------------
 
 def get_message_title_by_id(messages: List[ChatMessage], message_id: int) -> str:
-    # Find the message with the given id
     for message in messages:
-        if message.id == message_id:
-            # Return the last 10 characters of the content
+        if message.message_id == message_id:
             return message.content[:20]
     return "Message not found"
 
 def selector_adapter(sess: ChatSession):
-    # NOTE: The function that transforms a data model into a tuple(id:str, label:str).
     message_title = get_message_title_by_id(sess.messages, 3)
-    return (sess.session_no, message_title)
+    return (sess.chat_session_no, message_title)

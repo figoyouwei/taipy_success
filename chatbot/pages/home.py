@@ -27,9 +27,11 @@ from pages.chat import sessions
 # ------------------------------
 
 # NOTE: display sidebar by default
-sidebar_switch = False
+sidebar_switch = False 
 
 def toggle_partial_sidebar(state):
+    print("home.py: toggle_partial_sidebar")
+    print("state.user_session_id: ", state.user_session_id)
     if state.sidebar_switch:
         with tgb.Page() as sidebar:
             with tgb.layout(columns="1 11", columns__mobile="1"):
@@ -48,8 +50,8 @@ def toggle_partial_sidebar(state):
                     tgb.image(content="icons/icon_hm.png", class_name="profile_image")
                     # sidebar titles
                     tgb.text(
-                        "#### {username}", class_name="text-center profile_name", mode="md"
-                        )
+                        "#### {state.user_session_id}", class_name="text-center profile_name", mode="md"
+                    )
 
                     # NOTE: reset part
                     tgb.button(
