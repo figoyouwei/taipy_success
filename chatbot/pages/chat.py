@@ -134,8 +134,13 @@ def reset_session(state) -> None:
         notify(state, "I", "No messages to reset")
         return
 
+    # Ensure the current chat session has the correct user_session_id
+    if state.chat_session.user_session_id == "":
+        state.chat_session.user_session_id = state.user_session_id
+
     # Check if the current session already exists in the session_collection
-    existing_session = next((s for s in state.session_collection.sessions if s.chat_session_id == state.chat_session.chat_session_id), None)
+    existing_session = next((s for s in state.session_collection.sessions 
+                           if s.chat_session_id == state.chat_session.chat_session_id), None)
 
     if existing_session:
         # Update the existing session's messages using the new method
@@ -145,14 +150,17 @@ def reset_session(state) -> None:
         state.session_collection.add_session(state.chat_session)
         print(f"Current session with id {state.chat_session.chat_session_id} was added to the session collection.")
 
-    print(state.session_collection.sessions)
-
     # Calculate the new session number
     new_session_no = len(state.session_collection.sessions) + 1
 
-    # Create a new ChatSession with the incremented session_no (starting from 1)
-    state.chat_session = ChatSession(chat_session_no=new_session_no, messages=empty_messages)
-    print(f"A new session with chat_session_no {new_session_no} has been created.")
+    # Create a new ChatSession with both session_no and user_session_id
+    state.chat_session = ChatSession(
+        user_session_id=state.user_session_id,
+        chat_session_no=new_session_no,
+        messages=empty_messages
+    )
+    print(f"A new session with chat_session_no {new_session_no} and user_session_id {state.user_session_id} has been created.")
+    print(state.chat_session)
 
     # NOTE: update chat
     state.messages = state.chat_session.to_list()
