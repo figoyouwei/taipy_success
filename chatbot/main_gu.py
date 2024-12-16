@@ -27,6 +27,8 @@ os.environ["TAIPY_AUTH_HASH"] = "taipy"
 
 username = None
 password = None
+credentials = None
+login_dialog = True
 
 passwords = {
     "florian": hash_taipy_password("flower"),
@@ -47,7 +49,6 @@ Config.configure_authentication(
 
 user_session_id = None
 sidebar_switch = False
-login_dialog = True
 
 # NOTE: on_init is created by taipy
 def on_init(state):
@@ -59,14 +60,12 @@ def on_init(state):
     print("state.sidebar_switch: ", state.sidebar_switch)
 
 # User login function
-def on_user_login(state: State, id, login_args):
-    # Extract username and password from login_args
-    state.username, password = login_args["args"][:2]
-    print(f"Username: {state.username}, Password: {password}")
+def on_user_login(state: State):
     try:
-        # Attempt to log in using Taipy Enterprise
-        state.credentials = tp_enterprise.login(state, state.username, password)
-        notify(state, "success", f"Logged in as {state.username}...")
+        # Use the state.username and state.password that are bound to the input fields
+        state.credentials = tp_enterprise.login(state, state.username, state.password)
+        state.login_dialog = False  # Close the login dialog
+        notify(state, "success", f"Logged in as User {state.username}...")
         navigate(state, "home", force=False)
         toggle_partial_sidebar(state)
     except Exception as e:
@@ -101,7 +100,7 @@ with tgb.Page() as root_page:
             with tgb.part():
                 tgb.button("Guest Login", class_name="fullwidth", on_action=on_guest_login)
             with tgb.part():
-                tgb.button("Login", class_name="fullwidth plain", on_action=on_user_login)
+                tgb.button("User Login", class_name="fullwidth plain", on_action=on_user_login)
 
 # Define page routing
 pages = {
