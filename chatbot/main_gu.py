@@ -31,12 +31,12 @@ credentials = None
 login_dialog = True
 
 passwords = {
-    "florian": hash_taipy_password("flower"),
+    "figo": hash_taipy_password("figo76"),
     "alex": hash_taipy_password("alex24"),
 }
 
 roles = {
-    "florian": ["admin", "staff"],
+    "figo": ["admin", "staff"],
     "alex": ["reader"],
 }
 
@@ -60,7 +60,7 @@ def on_init(state):
     print("state.sidebar_switch: ", state.sidebar_switch)
 
 # User login function
-def on_user_login(state: State):
+def on_user_login(state):
     try:
         # Use the state.username and state.password that are bound to the input fields
         state.credentials = tp_enterprise.login(state, state.username, state.password)
@@ -89,7 +89,7 @@ def on_guest_login(state):
         print(f"Login exception: {e}")
 
 # Root page
-with tgb.Page() as root_page:
+with tgb.Page() as login_page:
     with tgb.dialog("{login_dialog}", title="Welcome!"):
         tgb.input("{username}", label="Username")
         tgb.input("{password}", label="Password", password=True)
@@ -103,8 +103,11 @@ with tgb.Page() as root_page:
                 tgb.button("User Login", class_name="fullwidth plain", on_action=on_user_login)
 
 # Define page routing
+root_page = tgb.Page(on_init=on_init)
+
 pages = {
     "/": root_page,
+    "login": login_page,
     "home": page_home,
 }
 

@@ -1,7 +1,7 @@
 """
 @author: Youwei Zheng
 @target: sidebar page with toggle
-@update: 2024.11.11
+@update: 2024.12.16
 """
 
 import taipy.gui.builder as tgb
@@ -22,9 +22,17 @@ from pages.chat import selector_adapter
 from pages.chat import selected_session
 from pages.chat import sessions
 
+from taipy.gui import navigate, notify
+
 # ------------------------------
 # Create page
 # ------------------------------
+
+def logout(state):
+    print("home.py: logout")
+    navigate(state, "login", force=True)
+    state.login_dialog = True
+    notify(state, "success", "Logged out...")
 
 def toggle_partial_sidebar(state):
     print("home.py: toggle_partial_sidebar")
@@ -45,9 +53,20 @@ def toggle_partial_sidebar(state):
             with tgb.layout(columns="1 3", columns__mobile="1"):
                 # NOTE: sidebar class
                 with tgb.part(class_name="sidebar"):
-                    tgb.toggle("{sidebar_switch}", on_change=toggle_partial_sidebar)
+                    with tgb.layout(columns="1 2 1"):
+                        with tgb.part():
+                            tgb.toggle("{sidebar_switch}", on_change=toggle_partial_sidebar)
+                        with tgb.part():
+                            tgb.text("")
+                        with tgb.part():
+                            tgb.button(
+                                "Logout", class_name="fullwidth", on_action=logout
+                            )
+
+                    # NOTE: profile image
                     tgb.image(content="icons/icon_hm.png", class_name="profile_image")
-                    # sidebar titles
+
+                    # NOTE: sidebar titles
                     tgb.text(
                         "#### {user_session_id}", class_name="text-center profile_name", mode="md"
                     )
