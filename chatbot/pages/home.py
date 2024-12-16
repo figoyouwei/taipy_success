@@ -26,12 +26,11 @@ from pages.chat import sessions
 # Create page
 # ------------------------------
 
-# NOTE: display sidebar by default
-sidebar_switch = False 
-
 def toggle_partial_sidebar(state):
     print("home.py: toggle_partial_sidebar")
     print("state.user_session_id: ", state.user_session_id)
+    print("state.sidebar_switch: ", state.sidebar_switch)
+
     if state.sidebar_switch:
         with tgb.Page() as sidebar:
             with tgb.layout(columns="1 11", columns__mobile="1"):
