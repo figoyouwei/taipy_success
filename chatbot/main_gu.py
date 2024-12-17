@@ -13,11 +13,16 @@ load_dotenv(find_dotenv())
 import taipy.gui.builder as tgb
 from taipy.gui import Gui, State, navigate, notify
 from taipy.core.config import Config
-from taipy.auth import hash_taipy_password
-import taipy.enterprise.gui as tp_enterprise
 
 from pages.home import page_home, toggle_partial_sidebar
 from pages.chat import page_chat
+
+# ------------------------------
+# enterprise imports
+# ------------------------------
+
+import taipy.enterprise.gui as tp_enterprise
+from taipy.auth import hash_taipy_password
 
 # ------------------------------
 # auth related
@@ -104,6 +109,42 @@ def on_guest_login(state):
     except Exception as e:
         notify(state, "error", f"Login failed: {e}")
         print(f"Login exception: {e}")
+
+# ------------------------------
+# Logout function
+# ------------------------------
+
+def on_logout(state):
+    try:
+        # Reset auth-related state variables
+        state.username = None
+        state.password = None
+        state.credentials = None
+        state.login_dialog = True
+        state.user_session_id = str(uuid.uuid4())[-6:]  # Generate new session ID
+        state.sidebar_switch = False
+        
+        # Reset all chat-specific variables
+        empty_messages = create_initial_chat_session("").messages
+        state.chat_session = ChatSession(messages=empty_messages, user_session_id="")
+        state.messages = state.chat_session.to_list()
+        
+        state.selected_session = ChatSession(messages=[], user_session_id="")
+        state.session_collection = SessionCollection()
+        state.sessions = state.session_collection.sessions
+        
+        # Logout from taipy enterprise
+        tp_enterprise.logout(state)
+        
+        # Notify user
+        notify(state, "success", "Logged out successfully")
+        
+        # Navigate back to login page
+        navigate(state, "login", force=True)
+        
+    except Exception as e:
+        notify(state, "error", f"Logout failed: {e}")
+        print(f"Logout exception: {e}")
 
 # ------------------------------
 # Root page

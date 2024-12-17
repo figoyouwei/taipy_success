@@ -13,16 +13,9 @@ from typing import List, Optional, Any
 from models.chat import ChatMessage, ChatSession, SessionCollection
 
 # ------------------------------
-# Initialize state variables
+# Initialize empty messages
 # ------------------------------
 
-# NOTE: The user interacts with the Python interpreter only via css to change icon size
-users: List[List[str]] = [
-    ["Human", Icon("icons/icon_hm.png")],
-    ["Robot", Icon("icons/icon_ai.png")],
-]
-
-# * Initialize empty messages
 def create_initial_chat_session(user_session_id: str):
     return ChatSession(
         user_session_id=user_session_id,
@@ -32,17 +25,26 @@ def create_initial_chat_session(user_session_id: str):
         ]
     )
 
+# ------------------------------
+# Initialize state variables
+# ------------------------------
+
+# NOTE: The user interacts with the Python interpreter only via css to change icon size
+users: List[List[str]] = [
+    ["Human", Icon("icons/icon_hm.png")],
+    ["Robot", Icon("icons/icon_ai.png")],
+]
+
 # * Initialize chat session as current session
 empty_messages = create_initial_chat_session("").messages  # Add this line to define empty_messages
 print("empty_messages: ", empty_messages)
 
-# * Initialize chat session as current session
+# * Initialize selected conversation and history conversations which contain messages
 chat_session = ChatSession(messages=empty_messages, user_session_id="")
 messages = chat_session.to_list()
 
-# * Initialize selected conversation and history conversations which contain messages
 selected_session = ChatSession(messages=[], user_session_id="") 
-session_collection = SessionCollection()
+session_collection = SessionCollection(user_session_id="")
 sessions = session_collection.sessions
 
 # ------------------------------
@@ -122,38 +124,47 @@ def reset_session(state) -> None:
     Args:
         - state: The current state of the app, including chat_sessions and the current session.
     """
-
     print("The user is resetting chat...")
 
-    # Initialize session_collection if it doesn't exist
-    if state.session_collection is None:
-        state.session_collection = SessionCollection()
+    # Validate user_session_id
+    if not hasattr(state, 'user_session_id') or not state.user_session_id:
+        notify(state, "E", "User session ID is required")
+        return
+
+    # Initialize session_collection with error handling
+    try:
+        if state.session_collection is None or state.session_collection.user_session_id != state.user_session_id:
+            state.session_collection = SessionCollection(user_session_id=state.user_session_id)
+    except Exception as e:
+        notify(state, "E", f"Failed to initialize session: {str(e)}")
+        return
+
+    print("session_collection initialized...")
+    print(state.chat_session)
 
     # Check if there are any messages to save
     if len(state.chat_session.messages) <= 2:
         notify(state, "I", "No messages to reset")
         return
 
-    # Ensure the current chat session has the correct user_session_id
-    if state.chat_session.user_session_id == "":
-        state.chat_session.user_session_id = state.user_session_id
-
     # Check if the current session already exists in the session_collection
     existing_session = next((s for s in state.session_collection.sessions 
-                           if s.chat_session_id == state.chat_session.chat_session_id), None)
+                           if s.chat_session_id == state.chat_session.chat_session_id 
+                           and s.user_session_id == state.user_session_id), None)
 
     if existing_session:
-        # Update the existing session's messages using the new method
         existing_session.update_messages(state.chat_session.messages)
     else:
-        # Add the current session to the collection
+        # Ensure chat session has correct user_session_id before adding
+        state.chat_session.user_session_id = state.user_session_id
         state.session_collection.add_session(state.chat_session)
-        print(f"Current session with id {state.chat_session.chat_session_id} was added to the session collection.")
 
-    # Calculate the new session number
-    new_session_no = len(state.session_collection.sessions) + 1
+    # Calculate the new session number for this user
+    user_sessions = [s for s in state.session_collection.sessions 
+                    if s.user_session_id == state.user_session_id]
+    new_session_no = len(user_sessions) + 1
 
-    # Create a new ChatSession with both session_no and user_session_id
+    # Create new session with validated user_session_id
     state.chat_session = ChatSession(
         user_session_id=state.user_session_id,
         chat_session_no=new_session_no,

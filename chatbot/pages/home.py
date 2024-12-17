@@ -4,8 +4,9 @@
 @update: 2024.12.16
 """
 
+import uuid
 import taipy.gui.builder as tgb
-from models.chat import ChatSession
+from taipy.gui import navigate, notify
 
 # ------------------------------
 # Import functions
@@ -22,20 +23,48 @@ from pages.chat import selector_adapter
 from pages.chat import selected_session
 from pages.chat import sessions
 
-from taipy.gui import navigate, notify
+from pages.chat import create_initial_chat_session
+from models.chat import ChatSession
+from models.chat import SessionCollection
+
+import taipy.enterprise.gui as tp_enterprise
 
 # ------------------------------
 # logout
 # ------------------------------
 
-def logout(state):
-    print("home.py: logout")
-    navigate(state, "login", force=True)
+def on_logout(state):
+    try:        
+        # Reset auth-related state variables
+        state.username = None
+        state.password = None
+        state.credentials = None
+        state.login_dialog = True
+        state.sidebar_switch = False
+        
+        # Reset all chat-specific variables
+        empty_messages = create_initial_chat_session("").messages
+        state.chat_session = ChatSession(messages=empty_messages, user_session_id="")
+        state.messages = state.chat_session.to_list()
+        
+        state.selected_session = ChatSession(messages=[], user_session_id="")
+        state.session_collection = SessionCollection(user_session_id="")
+        state.sessions = state.session_collection.sessions
 
-    state.login_dialog = True
-    print("state.login_dialog: ", state.login_dialog)
+        # update partial sidebar
+        toggle_partial_sidebar(state)
 
-    notify(state, "success", "Logged out...")
+        # Logout from taipy enterprise
+        tp_enterprise.logout(state)
+        
+        # Notify user
+        notify(state, "success", "Logged out successfully")
+        
+        # Navigate back to login page
+        navigate(state, "login", force=True)
+    except Exception as e:
+        notify(state, "error", f"Logout failed: {e}")
+        print(f"Logout exception: {e}")
 
 # ------------------------------
 # home page
@@ -67,7 +96,7 @@ def toggle_partial_sidebar(state):
                             tgb.text("")
                         with tgb.part():
                             tgb.button(
-                                "Logout", class_name="fullwidth", on_action=logout
+                                "Logout", class_name="fullwidth", on_action=on_logout
                             )
 
                     # NOTE: profile image

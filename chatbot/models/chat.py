@@ -1,7 +1,7 @@
 """
 @author: Youwei Zheng
 @target: Chat Message Model
-@update: 2024.09.11
+@update: 2024.12.17
 """
 
 import uuid
@@ -45,10 +45,13 @@ class ChatSession(BaseModel):
 
 
 class SessionCollection(BaseModel):
+    user_session_id: str
     sessions: List[ChatSession] = []
 
     def add_session(self, session: ChatSession):
         """Add a new ChatSession to the collection."""
+        if session.user_session_id != self.user_session_id:
+            raise ValueError("Session user_session_id does not match collection user_session_id")
         self.sessions.append(session)
 
     def get_session(self, session_id: str) -> ChatSession:
@@ -58,9 +61,6 @@ class SessionCollection(BaseModel):
                 return session
         return None
 
-    def get_user_sessions(self, user_session_id: str) -> List[ChatSession]:
-        """Retrieve all ChatSessions for a specific user."""
-        return [
-            session for session in self.sessions 
-            if session.user_session_id == user_session_id
-        ]
+    def get_user_sessions(self) -> List[ChatSession]:
+        """Retrieve all ChatSessions for this collection's user."""
+        return self.sessions
