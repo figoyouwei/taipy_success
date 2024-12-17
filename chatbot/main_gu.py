@@ -4,8 +4,8 @@
 @update: 2024.12.16
 """
 
-import os
 import uuid
+import os
 from dotenv import find_dotenv, load_dotenv
 
 load_dotenv(find_dotenv())
@@ -28,7 +28,7 @@ os.environ["TAIPY_AUTH_HASH"] = "taipy"
 username = None
 password = None
 credentials = None
-login_dialog = True
+login_dialog = True # default login dialog important for login page rendering
 
 passwords = {
     "figo": hash_taipy_password("figo76"),
@@ -50,16 +50,23 @@ Config.configure_authentication(
 user_session_id = None
 sidebar_switch = False
 
-# NOTE: on_init is created by taipy
+# ------------------------------
+# on_init
+# ------------------------------
+
 def on_init(state):
-    print("on_init: main_auth.py")
+    print("on_init: main_gu.py")
+
     state.user_session_id = str(uuid.uuid4())[-6:]
     print("state.user_session_id: ", state.user_session_id)
 
     state.sidebar_switch = False
     print("state.sidebar_switch: ", state.sidebar_switch)
 
+# ------------------------------
 # User login function
+# ------------------------------
+
 def on_user_login(state):
     try:
         # Use the state.username and state.password that are bound to the input fields
@@ -73,10 +80,20 @@ def on_user_login(state):
         print(f"Login exception: {e}")
         navigate(state, to="login", force=False)
 
+# ------------------------------
 # Guest login function
+# ------------------------------
+
 def on_guest_login(state):
     # First close the login dialog
     state.login_dialog = False
+    print("state.login_dialog: ", state.login_dialog)
+
+    state.user_session_id = str(uuid.uuid4())[-6:]
+    print("state.user_session_id: ", state.user_session_id)
+
+    state.sidebar_switch = False
+    print("state.sidebar_switch: ", state.sidebar_switch)
     
     notify(state, "success", "Logged in as Guest...")
 
@@ -88,7 +105,10 @@ def on_guest_login(state):
         notify(state, "error", f"Login failed: {e}")
         print(f"Login exception: {e}")
 
+# ------------------------------
 # Root page
+# ------------------------------
+
 with tgb.Page() as login_page:
     with tgb.dialog("{login_dialog}", title="Welcome!"):
         tgb.input("{username}", label="Username")

@@ -25,14 +25,21 @@ from pages.chat import sessions
 from taipy.gui import navigate, notify
 
 # ------------------------------
-# Create page
+# logout
 # ------------------------------
 
 def logout(state):
     print("home.py: logout")
     navigate(state, "login", force=True)
+
     state.login_dialog = True
+    print("state.login_dialog: ", state.login_dialog)
+
     notify(state, "success", "Logged out...")
+
+# ------------------------------
+# home page
+# ------------------------------
 
 def toggle_partial_sidebar(state):
     print("home.py: toggle_partial_sidebar")
