@@ -1,10 +1,9 @@
 """
 @author: Youwei Zheng
 @target: chat page partial
-@update: 2024.12.13
+@update: 2024.12.18
 """
 
-import asyncio
 import taipy.gui.builder as tgb
 from taipy.gui import notify, Icon
 
@@ -31,12 +30,12 @@ def create_initial_chat_session(user_session_id: str):
 
 # NOTE: The user interacts with the Python interpreter only via css to change icon size
 users: List[List[str]] = [
-    ["Human", Icon("icons/icon_hm.png")],
+    ["Human", Icon("icons/icon_guest.png")],
     ["Robot", Icon("icons/icon_ai.png")],
 ]
 
 # * Initialize chat session as current session
-empty_messages = create_initial_chat_session("").messages  # Add this line to define empty_messages
+empty_messages = []  # Remove the initial assignment here
 print("empty_messages: ", empty_messages)
 
 # * Initialize selected conversation and history conversations which contain messages
@@ -226,21 +225,21 @@ def selector_adapter(sess: ChatSession):
 
 def init_chat(state):
     """Initialize all chat-related state variables"""
+    if not hasattr(state, 'user_session_id') or not state.user_session_id:
+        print("Warning: init_chat called without valid user_session_id")
+        return
+        
+    print(f"Initializing chat for user: {state.user_session_id}")
     
-    # User configuration
-    state.users = [
-        ["Human", Icon("icons/icon_hm.png")],
-        ["Robot", Icon("icons/icon_ai.png")],
-    ]
-
-    # Create initial messages
-    empty_messages = create_initial_chat_session(state.user_session_id).messages
+    # Create a fresh session collection
+    state.session_collection = SessionCollection(user_session_id=state.user_session_id)
+    state.sessions = []
     
-    # Initialize chat session and messages
-    state.chat_session = ChatSession(messages=empty_messages, user_session_id=state.user_session_id)
+    # Create a completely new chat session
+    state.chat_session = create_initial_chat_session(state.user_session_id)
     state.messages = state.chat_session.to_list()
     
-    # Initialize session management
+    # Reset selected session
     state.selected_session = ChatSession(messages=[], user_session_id=state.user_session_id)
-    state.session_collection = SessionCollection()
-    state.sessions = state.session_collection.sessions
+    
+    print(f"Chat initialized with session: {state.chat_session}")

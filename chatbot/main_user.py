@@ -1,7 +1,7 @@
 """
 @author: Youwei Zheng
-@target: Make auth work with anonymous user
-@update: 2024.12.16
+@target: Make auth work with guest and user
+@update: 2024.12.17
 """
 
 import uuid
@@ -15,7 +15,7 @@ from taipy.gui import Gui, State, navigate, notify
 from taipy.core.config import Config
 
 from pages.home import page_home, toggle_partial_sidebar
-from pages.chat import page_chat
+from pages.chat import init_chat, page_chat
 
 # ------------------------------
 # enterprise imports
@@ -61,25 +61,28 @@ sidebar_switch = False
 
 def on_init(state):
     print("on_init: main_gu.py")
-
-    state.user_session_id = str(uuid.uuid4())[-6:]
-    print("state.user_session_id: ", state.user_session_id)
-
     state.sidebar_switch = False
-    print("state.sidebar_switch: ", state.sidebar_switch)
 
 # ------------------------------
 # User login function
 # ------------------------------
+
+def on_user_login_fake(state):
+    notify(state, "info", f"功能正在开发中，计划下一阶段开放，敬请期待~")        
+    # print login message with user_session_id
+    print(f"main_user.py: on_user_login_fake")
 
 def on_user_login(state):
     try:
         # Use the state.username and state.password that are bound to the input fields
         state.credentials = tp_enterprise.login(state, state.username, state.password)
         state.login_dialog = False  # Close the login dialog
-        notify(state, "success", f"Logged in as User {state.username}...")
+        notify(state, "success", f"Logged in with user_session_id: {state.user_session_id}...")
         navigate(state, "home", force=False)
         toggle_partial_sidebar(state)
+        
+        # print login message with user_session_id
+        print(f"Logged in with user_session_id: {state.user_session_id}...")
     except Exception as e:
         notify(state, "error", f"Login failed: {e}")
         print(f"Login exception: {e}")
@@ -99,52 +102,21 @@ def on_guest_login(state):
 
     state.sidebar_switch = False
     print("state.sidebar_switch: ", state.sidebar_switch)
-    
-    notify(state, "success", "Logged in as Guest...")
 
+    # initialize chat session
+    init_chat(state)
+
+    # navigate to home page
     try:
         # Navigate and render
         navigate(state, "home", force=False)
         toggle_partial_sidebar(state)
+
+        notify(state, "success", "Logged in as Guest...")
+        print("Logged in as Guest with user_session_id: ", state.user_session_id)
     except Exception as e:
         notify(state, "error", f"Login failed: {e}")
         print(f"Login exception: {e}")
-
-# ------------------------------
-# Logout function
-# ------------------------------
-
-def on_logout(state):
-    try:
-        # Reset auth-related state variables
-        state.username = None
-        state.password = None
-        state.credentials = None
-        state.login_dialog = True
-        state.user_session_id = str(uuid.uuid4())[-6:]  # Generate new session ID
-        state.sidebar_switch = False
-        
-        # Reset all chat-specific variables
-        empty_messages = create_initial_chat_session("").messages
-        state.chat_session = ChatSession(messages=empty_messages, user_session_id="")
-        state.messages = state.chat_session.to_list()
-        
-        state.selected_session = ChatSession(messages=[], user_session_id="")
-        state.session_collection = SessionCollection()
-        state.sessions = state.session_collection.sessions
-        
-        # Logout from taipy enterprise
-        tp_enterprise.logout(state)
-        
-        # Notify user
-        notify(state, "success", "Logged out successfully")
-        
-        # Navigate back to login page
-        navigate(state, "login", force=True)
-        
-    except Exception as e:
-        notify(state, "error", f"Logout failed: {e}")
-        print(f"Logout exception: {e}")
 
 # ------------------------------
 # Root page
@@ -161,7 +133,7 @@ with tgb.Page() as login_page:
             with tgb.part():
                 tgb.button("Guest Login", class_name="fullwidth", on_action=on_guest_login)
             with tgb.part():
-                tgb.button("User Login", class_name="fullwidth plain", on_action=on_user_login)
+                tgb.button("User Login", class_name="fullwidth plain", on_action=on_user_login_fake)
 
 # Define page routing
 root_page = tgb.Page(on_init=on_init)

@@ -1,10 +1,9 @@
 """
 @author: Youwei Zheng
 @target: sidebar page with toggle
-@update: 2024.12.16
+@update: 2024.12.17
 """
 
-import uuid
 import taipy.gui.builder as tgb
 from taipy.gui import navigate, notify
 
@@ -35,6 +34,9 @@ import taipy.enterprise.gui as tp_enterprise
 
 def on_logout(state):
     try:        
+        # Store the user_session_id for logging
+        old_session_id = state.user_session_id
+        
         # Reset auth-related state variables
         state.username = None
         state.password = None
@@ -42,22 +44,21 @@ def on_logout(state):
         state.login_dialog = True
         state.sidebar_switch = False
         
-        # Reset all chat-specific variables
-        empty_messages = create_initial_chat_session("").messages
-        state.chat_session = ChatSession(messages=empty_messages, user_session_id="")
-        state.messages = state.chat_session.to_list()
+        # Reset all chat-related variables to None first
+        state.chat_session = None
+        state.messages = []
+        state.selected_session = None
+        state.session_collection = None
+        state.sessions = []
+        state.user_session_id = ""
         
-        state.selected_session = ChatSession(messages=[], user_session_id="")
-        state.session_collection = SessionCollection(user_session_id="")
-        state.sessions = state.session_collection.sessions
-
         # update partial sidebar
         toggle_partial_sidebar(state)
 
         # Logout from taipy enterprise
         tp_enterprise.logout(state)
         
-        # Notify user
+        print(f"Logged out user: {old_session_id}")
         notify(state, "success", "Logged out successfully")
         
         # Navigate back to login page
@@ -100,7 +101,7 @@ def toggle_partial_sidebar(state):
                             )
 
                     # NOTE: profile image
-                    tgb.image(content="icons/icon_hm.png", class_name="profile_image")
+                    tgb.image(content="icons/icon_guest.png", class_name="profile_image")
 
                     # NOTE: sidebar titles
                     tgb.text(
