@@ -47,14 +47,10 @@ session_collection = SessionCollection(user_session_id="")
 sessions = session_collection.sessions
 
 # ------------------------------
-# Functions
+# Chat API
 # ------------------------------
 
-from tools.chatrag import chat_suaee
-from tools.chatcpl import chat_openai
-from tools.chatcpl import chat_tongyi_naive
-
-chatllm = chat_openai
+from tools.chatapi import chatllm
 
 # Example usage in evaluate function
 # Note: var_name is not very important in the chat context.
